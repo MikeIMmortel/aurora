@@ -6,18 +6,59 @@ interface BodyFigureProps {
   params: BodyParams;
 }
 
-/** Aurora gold materiaal — gedeeld door alle meshes */
-const MATERIAL_PROPS = {
-  color: '#C8A55C',
-  metalness: 0.3,
-  roughness: 0.6,
+/** Warme huidkleur — neutraal, niet te metallic */
+const SKIN_MATERIAL = {
+  color: '#D4A574',
+  metalness: 0.05,
+  roughness: 0.75,
 };
 
 /**
- * Parametrisch 3D lichaam.
+ * Taperende ledemaat: cilinder met sphere-caps aan beide uiteinden voor
+ * naadloze overgangen (geen harde rand waar bv. de elleboog zit).
+ */
+function TaperedLimb({
+  topRadius,
+  bottomRadius,
+  length,
+  position,
+}: {
+  topRadius: number;
+  bottomRadius: number;
+  length: number;
+  position: [number, number, number];
+}) {
+  return (
+    <group position={position}>
+      <mesh>
+        <cylinderGeometry args={[topRadius, bottomRadius, length, 20]} />
+        <meshStandardMaterial {...SKIN_MATERIAL} />
+      </mesh>
+      <mesh position={[0, length / 2, 0]}>
+        <sphereGeometry args={[topRadius, 16, 12]} />
+        <meshStandardMaterial {...SKIN_MATERIAL} />
+      </mesh>
+      <mesh position={[0, -length / 2, 0]}>
+        <sphereGeometry args={[bottomRadius, 16, 12]} />
+        <meshStandardMaterial {...SKIN_MATERIAL} />
+      </mesh>
+    </group>
+  );
+}
+
+/**
+ * Parametrisch 3D lichaam — v2.
  *
- * Figuur staat rechtop op Y=0, totale hoogte ~1.73 units.
- * Elke dimensie reageert op de BodyParams die uit de meetdata komen.
+ * Verbeteringen t.o.v. v1:
+ * - Torso is één doorlopend lathe-mesh met natuurlijke taille-taper, borstverbreding
+ *   en schouderovergang i.p.v. twee stapelende cilinders
+ * - Torso is elliptisch (bredere zijkanten dan voorkant/achterkant) door Z-vertices
+ *   per hoogte te schalen naar de verhouding X/Z uit de meting
+ * - Armen en benen taperen (bovenarm breder dan elleboog; dij breder dan knie etc.)
+ * - Zichtbare schouders, handen en voeten als aparte meshes
+ * - Huidkleur materiaal i.p.v. metalen goud
+ *
+ * Dimensies in meters; figuur staat op Y=0 met hoofd rond Y=1.73.
  */
 export default function BodyFigure({ params }: BodyFigureProps) {
   const {
@@ -33,137 +74,156 @@ export default function BodyFigure({ params }: BodyFigureProps) {
     lowerLegRadius,
   } = params;
 
-  // ------- Hoogte-posities (van boven naar beneden) -------
-  const headY = 1.64;
-  const neckY = 1.52;
-  const neckH = 0.06;
-  const chestH = 0.30;
-  const chestY = 1.34;
-  const waistH = 0.15;
-  const waistY = chestY - chestH / 2 - waistH / 2; // ~1.115
-  const hipY = waistY - waistH / 2; // ~1.04
+  // --- Anatomische Y-posities ---------------------------------------------
+  const hipY = 1.04;
+  const neckBaseY = 1.52;
+  const torsoHeight = neckBaseY - hipY; // 0.48
+  const shoulderY = 1.44;
+  const headCenterY = 1.66;
 
-  // Armen: schouders net onder bovenkant borst
-  const shoulderY = chestY + chestH / 2 - 0.04; // ~1.45
-  const shoulderSpread = chestRadiusX + upperArmRadius + 0.02;
   const upperArmH = 0.28;
-  const upperArmY = shoulderY - upperArmH / 2 - 0.02;
   const forearmH = 0.24;
-  const forearmY = upperArmY - upperArmH / 2 - forearmH / 2;
+  const upperArmCenterY = shoulderY - 0.02 - upperArmH / 2;
+  const forearmCenterY = upperArmCenterY - upperArmH / 2 - forearmH / 2 - 0.02;
+  const handY = forearmCenterY - forearmH / 2 - 0.05;
 
-  // Benen: beginnen bij heupen
-  const legSpread = 0.08;
   const upperLegH = 0.38;
-  const upperLegY = hipY - upperLegH / 2;
   const lowerLegH = 0.38;
-  const lowerLegY = upperLegY - upperLegH / 2 - lowerLegH / 2;
+  const upperLegCenterY = hipY - upperLegH / 2;
+  const lowerLegCenterY = upperLegCenterY - upperLegH / 2 - lowerLegH / 2 - 0.02;
+  const footY = lowerLegCenterY - lowerLegH / 2 - 0.03;
 
-  // ------- Elliptische torso geometrie (chest + waist) -------
-  const chestGeo = useMemo(() => {
-    const geo = new THREE.CylinderGeometry(1, 1, chestH, 24);
-    // Schaal de vertices naar ellips-vorm
+  const shoulderX = chestRadiusX * 0.85 + upperArmRadius * 0.6;
+  const legOffsetX = 0.08;
+
+  // --- Torso als lathe-mesh met elliptische cross-section ----------------
+  const torsoGeo = useMemo(() => {
+    // Profiel: [hoogtefractie 0–1, radius in X-as]
+    const profile: [number, number][] = [
+      [0.00, waistRadiusX * 1.05],  // heup (iets breder)
+      [0.12, waistRadiusX * 0.98],
+      [0.28, waistRadiusX * 0.88],  // taille (smalst)
+      [0.44, waistRadiusX * 1.04],  // onderaan borstkas
+      [0.62, chestRadiusX * 0.98],
+      [0.72, chestRadiusX],         // borst (breedst bovenin)
+      [0.84, chestRadiusX * 0.80],
+      [0.92, chestRadiusX * 0.45],  // schouderovergang
+      [1.00, neckRadius * 1.15],    // nekbasis
+    ];
+
+    const points = profile.map(([f, r]) => new THREE.Vector2(r, f * torsoHeight));
+    const geo = new THREE.LatheGeometry(points, 40);
+
+    // Maak torso elliptisch: voorkant/achterkant smaller dan zijkant
+    const waistRatio = waistRadiusZ / waistRadiusX;
+    const chestRatio = chestRadiusZ / chestRadiusX;
     const pos = geo.attributes.position;
     for (let i = 0; i < pos.count; i++) {
-      const x = pos.getX(i);
-      const z = pos.getZ(i);
-      pos.setX(i, x * chestRadiusX);
-      pos.setZ(i, z * chestRadiusZ);
-    }
-    pos.needsUpdate = true;
-    geo.computeVertexNormals();
-    return geo;
-  }, [chestRadiusX, chestRadiusZ, chestH]);
-
-  const waistGeo = useMemo(() => {
-    const geo = new THREE.CylinderGeometry(1, 1, waistH, 24);
-    const pos = geo.attributes.position;
-    // Top van waist = iets smaller (overgang van borst)
-    // Bottom = iets breder (heupen)
-    for (let i = 0; i < pos.count; i++) {
-      const x = pos.getX(i);
       const y = pos.getY(i);
       const z = pos.getZ(i);
-      // Interpoleer van borst-breedte (top) naar taille-breedte (bottom)
-      const blend = (y / waistH) + 0.5; // 0=bottom, 1=top
-      const rx = chestRadiusX * blend + waistRadiusX * (1 - blend);
-      const rz = chestRadiusZ * blend + waistRadiusZ * (1 - blend);
-      pos.setX(i, x * rx);
-      pos.setZ(i, z * rz);
+      const frac = Math.max(0, Math.min(1, y / torsoHeight));
+      // Blend tussen waist-ratio (onder) en chest-ratio (boven)
+      let ratio: number;
+      if (frac < 0.28) ratio = waistRatio;
+      else if (frac > 0.72) ratio = chestRatio;
+      else ratio = waistRatio + (chestRatio - waistRatio) * ((frac - 0.28) / 0.44);
+      pos.setZ(i, z * ratio);
     }
     pos.needsUpdate = true;
     geo.computeVertexNormals();
     return geo;
-  }, [chestRadiusX, chestRadiusZ, waistRadiusX, waistRadiusZ, waistH]);
-
-  // Capsule geometrie helper
-  const capsule = (radius: number, height: number) => (
-    <capsuleGeometry args={[radius, height, 8, 16]} />
-  );
+  }, [chestRadiusX, chestRadiusZ, waistRadiusX, waistRadiusZ, neckRadius, torsoHeight]);
 
   return (
     <group>
-      {/* Hoofd */}
-      <mesh position={[0, headY, 0]}>
-        <sphereGeometry args={[headRadius, 24, 24]} />
-        <meshStandardMaterial {...MATERIAL_PROPS} />
+      {/* --- HOOFD + NEK --- */}
+      <mesh position={[0, headCenterY, 0]}>
+        <sphereGeometry args={[headRadius, 32, 24]} />
+        <meshStandardMaterial {...SKIN_MATERIAL} />
+      </mesh>
+      {/* Kaaklijn — subtiel */}
+      <mesh position={[0, headCenterY - headRadius * 0.35, headRadius * 0.25]} scale={[1, 0.7, 1]}>
+        <sphereGeometry args={[headRadius * 0.55, 16, 12]} />
+        <meshStandardMaterial {...SKIN_MATERIAL} />
       </mesh>
 
-      {/* Nek */}
-      <mesh position={[0, neckY, 0]}>
-        <cylinderGeometry args={[neckRadius, neckRadius, neckH, 16]} />
-        <meshStandardMaterial {...MATERIAL_PROPS} />
+      <mesh position={[0, neckBaseY + 0.04, 0]}>
+        <cylinderGeometry args={[neckRadius, neckRadius * 1.1, 0.10, 20]} />
+        <meshStandardMaterial {...SKIN_MATERIAL} />
       </mesh>
 
-      {/* Bovenlichaam (borst) - elliptisch */}
-      <mesh position={[0, chestY, 0]} geometry={chestGeo}>
-        <meshStandardMaterial {...MATERIAL_PROPS} />
+      {/* --- TORSO (één mesh) --- */}
+      <mesh position={[0, hipY, 0]} geometry={torsoGeo}>
+        <meshStandardMaterial {...SKIN_MATERIAL} />
       </mesh>
 
-      {/* Taille/buik - elliptisch, overvloeiend */}
-      <mesh position={[0, waistY, 0]} geometry={waistGeo}>
-        <meshStandardMaterial {...MATERIAL_PROPS} />
-      </mesh>
+      {/* --- SCHOUDERS (smoothing capsule) --- */}
+      {[-1, 1].map((side) => (
+        <mesh
+          key={`sh-${side}`}
+          position={[side * shoulderX * 0.92, shoulderY + 0.02, 0]}
+        >
+          <sphereGeometry args={[upperArmRadius * 1.25, 20, 16]} />
+          <meshStandardMaterial {...SKIN_MATERIAL} />
+        </mesh>
+      ))}
 
-      {/* ===== ARMEN ===== */}
+      {/* --- ARMEN --- */}
       {[-1, 1].map((side) => (
         <group key={`arm-${side}`}>
-          {/* Bovenarm */}
-          <mesh position={[side * shoulderSpread, upperArmY, 0]}>
-            {capsule(upperArmRadius, upperArmH)}
-            <meshStandardMaterial {...MATERIAL_PROPS} />
-          </mesh>
-          {/* Onderarm */}
-          <mesh position={[side * shoulderSpread, forearmY, 0]}>
-            {capsule(forearmRadius, forearmH)}
-            <meshStandardMaterial {...MATERIAL_PROPS} />
+          <TaperedLimb
+            topRadius={upperArmRadius}
+            bottomRadius={forearmRadius * 1.15}
+            length={upperArmH}
+            position={[side * shoulderX, upperArmCenterY, 0]}
+          />
+          <TaperedLimb
+            topRadius={forearmRadius}
+            bottomRadius={forearmRadius * 0.68}
+            length={forearmH}
+            position={[side * shoulderX, forearmCenterY, 0]}
+          />
+          {/* Hand — langwerpig en iets afgeplat */}
+          <mesh
+            position={[side * shoulderX, handY, 0]}
+            scale={[1, 1.5, 0.55]}
+          >
+            <sphereGeometry args={[forearmRadius * 0.75, 16, 12]} />
+            <meshStandardMaterial {...SKIN_MATERIAL} />
           </mesh>
         </group>
       ))}
 
-      {/* ===== BENEN ===== */}
+      {/* --- BENEN --- */}
       {[-1, 1].map((side) => (
         <group key={`leg-${side}`}>
-          {/* Bovenbeen */}
-          <mesh position={[side * legSpread, upperLegY, 0]}>
-            {capsule(upperLegRadius, upperLegH)}
-            <meshStandardMaterial {...MATERIAL_PROPS} />
-          </mesh>
-          {/* Onderbeen */}
-          <mesh position={[side * legSpread, lowerLegY, 0]}>
-            {capsule(lowerLegRadius, lowerLegH)}
-            <meshStandardMaterial {...MATERIAL_PROPS} />
+          <TaperedLimb
+            topRadius={upperLegRadius}
+            bottomRadius={lowerLegRadius * 1.1}
+            length={upperLegH}
+            position={[side * legOffsetX, upperLegCenterY, 0]}
+          />
+          <TaperedLimb
+            topRadius={lowerLegRadius}
+            bottomRadius={lowerLegRadius * 0.58}
+            length={lowerLegH}
+            position={[side * legOffsetX, lowerLegCenterY, 0]}
+          />
+          {/* Voet — langwerpig naar voren */}
+          <mesh
+            position={[side * legOffsetX, footY, 0.08]}
+            scale={[1, 0.5, 2.2]}
+          >
+            <sphereGeometry args={[lowerLegRadius * 0.78, 16, 12]} />
+            <meshStandardMaterial {...SKIN_MATERIAL} />
           </mesh>
         </group>
       ))}
 
-      {/* Grond-indicator (subtiele cirkel) */}
+      {/* --- GROND-INDICATOR --- */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.001, 0]}>
-        <circleGeometry args={[0.35, 32]} />
-        <meshStandardMaterial
-          color="#2A2A2A"
-          transparent
-          opacity={0.4}
-        />
+        <circleGeometry args={[0.45, 32]} />
+        <meshStandardMaterial color="#2A2A2A" transparent opacity={0.4} />
       </mesh>
     </group>
   );

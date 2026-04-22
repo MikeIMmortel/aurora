@@ -14,10 +14,14 @@ export default function BodyScene({ params }: BodySceneProps) {
       style={{ background: 'transparent' }}
       gl={{ alpha: true, antialias: true }}
     >
-      {/* Verlichting */}
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[3, 5, 4]} intensity={0.8} />
-      <directionalLight position={[-2, 3, -3]} intensity={0.3} />
+      {/* Verlichting — 3-point setup voor natuurlijke schaduwen op huid */}
+      <ambientLight intensity={0.35} />
+      {/* Key light (warm, van rechtsboven) */}
+      <directionalLight position={[3, 5, 4]} intensity={0.9} color="#FFF4E0" />
+      {/* Fill light (koel, van linksonder, zachter) */}
+      <directionalLight position={[-3, 2, 2]} intensity={0.35} color="#D4E4FF" />
+      {/* Rim light (achter, voor silhouette) */}
+      <directionalLight position={[0, 3, -4]} intensity={0.4} />
 
       {/* Figuur */}
       <BodyFigure params={params} />
