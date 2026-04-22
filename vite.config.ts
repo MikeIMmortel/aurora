@@ -14,10 +14,14 @@ export default defineConfig({
     host: true,
     port: 5173,
     strictPort: true,
+    // Accepteer alle hostnames — Tailscale regelt al authenticatie,
+    // en dit scheelt dat je elke nieuwe device-naam moet toevoegen
+    allowedHosts: true,
   },
   preview: {
     host: true,
     port: 5173,
     strictPort: true,
+    allowedHosts: true,
   },
 })
