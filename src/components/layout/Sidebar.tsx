@@ -1,10 +1,11 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Upload, GitCompareArrows, Target, PersonStanding, Utensils } from 'lucide-react';
+import { LayoutDashboard, Upload, GitCompareArrows, Target, PersonStanding, Utensils, Trophy } from 'lucide-react';
 
 const NAV_ITEMS = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/import', icon: Upload, label: 'Import' },
   { to: '/compare', icon: GitCompareArrows, label: 'Vergelijken' },
+  { to: '/benchmark', icon: Trophy, label: 'Benchmark' },
   { to: '/goals', icon: Target, label: 'Doelen' },
   { to: '/nutrition', icon: Utensils, label: 'Voeding' },
   { to: '/body', icon: PersonStanding, label: 'Lichaam' },
