@@ -4,6 +4,7 @@ import { parsePdf } from '../lib/pdf-parser';
 import { PdfDropzone } from '../components/import/PdfDropzone';
 import { ParsePreview } from '../components/import/ParsePreview';
 import { ImportHistory } from '../components/import/ImportHistory';
+import { PageHeader, pageContainerStyle } from '../components/layout/PageHeader';
 
 interface Props {
   measurements: Measurement[];
@@ -44,29 +45,42 @@ export function ImportPage({ measurements, addMeasurements, deleteMeasurement }:
   }
 
   return (
-    <div className="space-y-6 max-w-4xl">
-      <h2 className="text-xl font-semibold">Meting importeren</h2>
+    <div style={pageContainerStyle}>
+      <PageHeader
+        title="Im"
+        emphasized="port"
+        meta={`${measurements.length} ${measurements.length === 1 ? 'meting' : 'metingen'} in archief`}
+      />
 
-      <PdfDropzone onFileSelected={handleFile} isLoading={isLoading} />
+      <div className="max-w-4xl flex flex-col" style={{ gap: 'var(--gap-grid)' }}>
+        <PdfDropzone onFileSelected={handleFile} isLoading={isLoading} />
 
-      {error && (
-        <div className="bg-negative/10 border border-negative/30 rounded-xl p-4 text-negative text-sm">
-          {error}
-        </div>
-      )}
+        {error && (
+          <div
+            className="rounded-[14px] p-4 text-sm"
+            style={{
+              background: 'var(--color-bg-card)',
+              border: '1px solid var(--color-negative)',
+              color: 'var(--color-negative)',
+            }}
+          >
+            {error}
+          </div>
+        )}
 
-      {parsed && (
-        <ParsePreview
-          parsed={parsed}
-          duplicates={existingDates}
-          onConfirm={handleConfirm}
-          onCancel={() => setParsed(null)}
-        />
-      )}
+        {parsed && (
+          <ParsePreview
+            parsed={parsed}
+            duplicates={existingDates}
+            onConfirm={handleConfirm}
+            onCancel={() => setParsed(null)}
+          />
+        )}
 
-      {measurements.length > 0 && (
-        <ImportHistory measurements={measurements} onDelete={deleteMeasurement} />
-      )}
+        {measurements.length > 0 && (
+          <ImportHistory measurements={measurements} onDelete={deleteMeasurement} />
+        )}
+      </div>
     </div>
   );
 }

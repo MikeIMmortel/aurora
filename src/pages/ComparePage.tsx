@@ -2,6 +2,8 @@ import { useState } from 'react';
 import type { Measurement } from '../types/measurement';
 import { CompareSelector } from '../components/compare/CompareSelector';
 import { CompareTable } from '../components/compare/CompareTable';
+import { PageHeader, pageContainerStyle } from '../components/layout/PageHeader';
+import { formatShortDate } from '../lib/utils';
 
 interface Props {
   measurements: Measurement[];
@@ -13,9 +15,11 @@ export function ComparePage({ measurements }: Props) {
 
   if (measurements.length < 2) {
     return (
-      <div className="space-y-6 max-w-4xl">
-        <h2 className="text-xl font-semibold">Metingen vergelijken</h2>
-        <p className="text-ink-3">Je hebt minimaal 2 metingen nodig om te vergelijken.</p>
+      <div style={pageContainerStyle}>
+        <PageHeader title="Verge" emphasized="lijken" meta="Metingen naast elkaar" />
+        <p style={{ color: 'var(--color-ink-3)' }}>
+          Je hebt minimaal 2 metingen nodig om te vergelijken.
+        </p>
       </div>
     );
   }
@@ -24,16 +28,23 @@ export function ComparePage({ measurements }: Props) {
   const right = measurements.find((m) => m.date === rightDate) || measurements[measurements.length - 1];
 
   return (
-    <div className="space-y-6 max-w-4xl">
-      <h2 className="text-xl font-semibold">Metingen vergelijken</h2>
-      <CompareSelector
-        measurements={measurements}
-        leftDate={left.date}
-        rightDate={right.date}
-        onLeftChange={setLeftDate}
-        onRightChange={setRightDate}
+    <div style={pageContainerStyle}>
+      <PageHeader
+        title="Verge"
+        emphasized="lijken"
+        meta={`${formatShortDate(left.date)} → ${formatShortDate(right.date)}`}
       />
-      <CompareTable left={left} right={right} />
+
+      <div className="max-w-4xl flex flex-col" style={{ gap: 'var(--gap-grid)' }}>
+        <CompareSelector
+          measurements={measurements}
+          leftDate={left.date}
+          rightDate={right.date}
+          onLeftChange={setLeftDate}
+          onRightChange={setRightDate}
+        />
+        <CompareTable left={left} right={right} />
+      </div>
     </div>
   );
 }

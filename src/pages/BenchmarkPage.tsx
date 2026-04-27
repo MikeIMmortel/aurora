@@ -6,6 +6,12 @@ import {
   CATEGORY_LABELS,
 } from '../lib/benchmarks';
 import BenchmarkCard from '../components/benchmarks/BenchmarkCard';
+import {
+  PageHeader,
+  pageContainerStyle,
+  pageCardStyle,
+  cardTitleStyle,
+} from '../components/layout/PageHeader';
 import { formatDate } from '../lib/utils';
 
 interface Props {
@@ -17,10 +23,12 @@ export function BenchmarkPage({ measurements }: Props) {
 
   if (!latest) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <p className="text-ink-3">
-          Geen metingen gevonden. Importeer eerst een PDF om benchmarks te zien.
-        </p>
+      <div style={pageContainerStyle}>
+        <div className="flex items-center justify-center h-64">
+          <p style={{ color: 'var(--color-ink-3)' }}>
+            Geen metingen gevonden. Importeer eerst een PDF om benchmarks te zien.
+          </p>
+        </div>
       </div>
     );
   }
@@ -29,69 +37,83 @@ export function BenchmarkPage({ measurements }: Props) {
   const summary = summarizeBenchmarks(benchmarks);
 
   return (
-    <div className="space-y-6 max-w-4xl">
-      <div>
-        <h2 className="text-xl font-semibold">Benchmark</h2>
-        <p className="text-sm text-ink-3 mt-1">
-          Hoe scoor jij vergeleken met mannen van{' '}
-          <span className="text-aurora-gold">{latest.age} jaar</span> en{' '}
-          <span className="text-aurora-gold">{latest.height} cm</span>?
-          <span className="text-ink-3"> · meting {formatDate(latest.date)}</span>
-        </p>
-      </div>
+    <div style={pageContainerStyle}>
+      <PageHeader
+        title="Bench"
+        emphasized="mark"
+        meta={`Mannen · ${latest.age} jaar · ${latest.height} cm · meting ${formatDate(latest.date)}`}
+      />
 
       {/* Hero summary */}
       <div
-        className="rounded-2xl border p-6 flex flex-col gap-3"
+        className="rounded-[14px] p-7 flex flex-col gap-3 mb-6"
         style={{
-          borderColor: CATEGORY_COLORS[summary.level] + '60',
-          backgroundColor: CATEGORY_COLORS[summary.level] + '10',
+          background: 'var(--color-bg-card)',
+          border: '1px solid var(--color-rule)',
+          borderLeftWidth: '3px',
+          borderLeftColor: CATEGORY_COLORS[summary.level],
         }}
       >
-        <div className="flex items-center gap-3">
-          <div
-            className="w-3 h-3 rounded-full"
-            style={{ backgroundColor: CATEGORY_COLORS[summary.level] }}
-          />
+        <div className="flex items-baseline gap-3">
           <span
-            className="text-sm font-bold uppercase tracking-wider"
+            className="font-mono uppercase tracking-[0.14em] text-[10px]"
+            style={{ color: 'var(--color-ink-3)' }}
+          >
+            Algemeen oordeel
+          </span>
+          <span
+            className="font-mono uppercase tracking-[0.14em] text-[10px] font-bold"
             style={{ color: CATEGORY_COLORS[summary.level] }}
           >
-            Algemeen oordeel: {CATEGORY_LABELS[summary.level]}
+            {CATEGORY_LABELS[summary.level]}
           </span>
         </div>
-        <p className="text-base text-ink leading-relaxed">{summary.message}</p>
+        <p
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '20px',
+            color: 'var(--color-ink)',
+            lineHeight: 1.3,
+            margin: 0,
+          }}
+        >
+          {summary.message}
+        </p>
       </div>
 
       {/* Benchmark cards grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 mb-6" style={{ gap: 'var(--gap-grid)' }}>
         {benchmarks.map((b) => (
           <BenchmarkCard key={b.key} benchmark={b} />
         ))}
       </div>
 
       {/* Hoe te lezen */}
-      <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 flex flex-col gap-3">
-        <h3 className="text-sm font-semibold text-ink">Hoe lees je dit?</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+      <div style={pageCardStyle} className="flex flex-col gap-3">
+        <h3 style={cardTitleStyle}>Hoe lees je dit?</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-1">
           {(['excellent', 'good', 'average', 'concern', 'poor'] as const).map((cat) => (
             <div key={cat} className="flex items-center gap-2">
               <div
-                className="w-3 h-3 rounded-sm shrink-0"
+                className="w-2 h-2 rounded-full shrink-0"
                 style={{ backgroundColor: CATEGORY_COLORS[cat] }}
               />
-              <span className="text-xs text-ink-3">{CATEGORY_LABELS[cat]}</span>
+              <span
+                className="font-mono uppercase tracking-[0.1em]"
+                style={{ fontSize: 10, color: 'var(--color-ink-3)' }}
+              >
+                {CATEGORY_LABELS[cat]}
+              </span>
             </div>
           ))}
         </div>
-        <p className="text-xs text-ink-3 leading-relaxed mt-2">
-          Het witte bolletje op elke balk is jouw waarde. De gekleurde segmenten zijn
-          de drempels uit erkende richtlijnen (WHO, ACSM, ACE, peer-reviewed onderzoek).
-          Normen zijn aangepast aan jouw leeftijdsgroep — wat "fit" is voor 50 is anders
-          dan voor 25.
+        <p className="text-[12px] leading-relaxed mt-2" style={{ color: 'var(--color-ink-3)' }}>
+          De pin onder elke balk is jouw waarde, de gouden vlag boven is het ideaal voor jouw demografie.
+          De gekleurde segmenten komen uit erkende richtlijnen (WHO, ACSM, ACE, peer-reviewed onderzoek).
+          Normen zijn aangepast aan jouw leeftijdsgroep.
         </p>
-        <p className="text-xs text-ink-3 leading-relaxed">
-          <strong className="text-ink-3">BMI is bewust laag gezet</strong> in deze
+        <p className="text-[12px] leading-relaxed" style={{ color: 'var(--color-ink-3)' }}>
+          <strong style={{ color: 'var(--color-ink-2)' }}>BMI is bewust laag gezet</strong> in deze
           weergave omdat het voor jou (gespierd, lage vet%) een misleidende metriek is.
           De FFMI-score hierboven geeft een veel beter beeld.
         </p>

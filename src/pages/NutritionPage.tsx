@@ -6,6 +6,12 @@ import TodayIntake from '../components/nutrition/TodayIntake';
 import NutritionHistoryChart from '../components/nutrition/NutritionHistoryChart';
 import CustomQuickAdds from '../components/nutrition/CustomQuickAdds';
 import WeeklyReview from '../components/nutrition/WeeklyReview';
+import {
+  PageHeader,
+  pageContainerStyle,
+  pageCardStyle,
+  cardMetaStyle,
+} from '../components/layout/PageHeader';
 import { useNutritionSettings } from '../hooks/useNutritionSettings';
 import { useDailyIntake } from '../hooks/useDailyIntake';
 import { BUILTIN_QUICK_ADDS, calculateDailyTargets } from '../lib/nutrition';
@@ -22,10 +28,12 @@ export function NutritionPage({ measurements }: Props) {
 
   if (!latest) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <p className="text-ink-3">
-          Geen metingen gevonden. Importeer eerst een PDF om voedings-doelen te berekenen.
-        </p>
+      <div style={pageContainerStyle}>
+        <div className="flex items-center justify-center h-64">
+          <p style={{ color: 'var(--color-ink-3)' }}>
+            Geen metingen gevonden. Importeer eerst een PDF om voedings-doelen te berekenen.
+          </p>
+        </div>
       </div>
     );
   }
@@ -34,16 +42,14 @@ export function NutritionPage({ measurements }: Props) {
   const quickAdds = [...BUILTIN_QUICK_ADDS, ...settings.customQuickAdds];
 
   return (
-    <div className="space-y-6 max-w-5xl">
-      <div>
-        <h2 className="text-xl font-semibold">Voeding</h2>
-        <p className="text-sm text-ink-3 mt-1">
-          Berekend uit je meting van {formatDate(latest.date)} · vetvrije massa{' '}
-          <span className="text-aurora-gold">{latest.leanMass.toFixed(1)} kg</span>
-        </p>
-      </div>
+    <div style={pageContainerStyle}>
+      <PageHeader
+        title="Voe"
+        emphasized="ding"
+        meta={`Meting ${formatDate(latest.date)} · vetvrije massa ${latest.leanMass.toFixed(1)} kg`}
+      />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5" style={{ gap: 'var(--gap-grid)' }}>
         <InfoTile
           label="BMR (Katch-McArdle)"
           value={`${targets.bmr}`}
@@ -107,15 +113,15 @@ export function NutritionPage({ measurements }: Props) {
 
       <ProteinSources />
 
-      <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 text-xs text-ink-3 leading-relaxed">
-        <p className="mb-2">
-          <span className="text-ink-3 font-medium">Hoe dit wordt berekend:</span>{' '}
+      <div style={pageCardStyle} className="text-[12px] leading-relaxed" >
+        <p className="mb-2" style={{ color: 'var(--color-ink-3)' }}>
+          <span style={{ color: 'var(--color-ink-2)', fontWeight: 500 }}>Hoe dit wordt berekend:</span>{' '}
           BMR = 370 + 21,6 × vetvrije massa (Katch-McArdle, nauwkeuriger dan Harris-Benedict
           omdat je spiermassa bekend is). TDEE = BMR × activiteitsfactor. Doel bepaalt of er
           een tekort of overschot wordt opgeteld. Eiwit en vet zijn per kg lichaamsgewicht;
           koolhydraten vullen de rest van de kcal aan.
         </p>
-        <p>
+        <p style={{ color: 'var(--color-ink-3)' }}>
           Rustdagen zitten ~200 kcal lager dan trainingsdagen (minder koolhydraten nodig),
           eiwit blijft gelijk voor spierherstel. Bij een nieuwe meting past deze pagina zich
           automatisch aan.
@@ -137,13 +143,21 @@ function InfoTile({
   sub: string;
 }) {
   return (
-    <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-4 flex flex-col gap-1">
-      <span className="text-xs uppercase tracking-wider text-ink-3">{label}</span>
-      <span className="text-2xl font-bold">
+    <div style={pageCardStyle} className="flex flex-col gap-1.5">
+      <span style={cardMetaStyle}>{label}</span>
+      <span
+        style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '32px',
+          color: 'var(--color-ink)',
+          lineHeight: 1,
+        }}
+        className="tabular-nums"
+      >
         {value}
-        <span className="text-sm text-ink-3 ml-1">{unit}</span>
+        <span className="font-mono ml-2" style={{ fontSize: 11, color: 'var(--color-ink-3)' }}>{unit}</span>
       </span>
-      <span className="text-xs text-ink-3">{sub}</span>
+      <span className="text-[12px]" style={{ color: 'var(--color-ink-3)' }}>{sub}</span>
     </div>
   );
 }
