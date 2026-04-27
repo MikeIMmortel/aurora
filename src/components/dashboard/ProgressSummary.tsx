@@ -29,26 +29,26 @@ export default function ProgressSummary({ measurements }: ProgressSummaryProps) 
   };
 
   const deltaColor = (value: number, decreaseIsGood: boolean): string => {
-    if (value === 0) return 'text-gray-400';
+    if (value === 0) return 'text-ink-3';
     const isImproved = decreaseIsGood ? value < 0 : value > 0;
-    return isImproved ? 'text-[#4ADE80]' : 'text-[#F87171]';
+    return isImproved ? 'text-positive' : 'text-negative';
   };
 
   return (
-    <div className="rounded-2xl border border-[#2A2A2A] bg-[#1A1A1A] p-5">
-      <h3 className="text-sm font-medium text-gray-400 mb-2">Voortgang</h3>
-      <p className="text-white text-sm leading-relaxed">
-        <span className="text-gray-400">Sinds {formatDate(first.date)}:</span>{' '}
+    <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5">
+      <h3 className="text-sm font-medium text-ink-3 mb-2">Voortgang</h3>
+      <p className="text-ink text-sm leading-relaxed">
+        <span className="text-ink-3">Sinds {formatDate(first.date)}:</span>{' '}
         <span className="font-medium">Vetpercentage</span>{' '}
         <span className={`font-semibold ${deltaColor(bodyFatChange, true)}`}>
           {formatDelta(bodyFatChange, '%')}
         </span>
-        <span className="text-gray-500 mx-2">&middot;</span>
+        <span className="text-ink-3 mx-2">&middot;</span>
         <span className="font-medium">Spiermassa</span>{' '}
         <span className={`font-semibold ${deltaColor(leanMassChange, false)}`}>
           {formatDelta(leanMassChange, 'kg')}
         </span>
-        <span className="text-gray-500 mx-2">&middot;</span>
+        <span className="text-ink-3 mx-2">&middot;</span>
         <span className="font-medium">Buikomvang</span>{' '}
         <span className={`font-semibold ${deltaColor(bellyChange, true)}`}>
           {formatDelta(bellyChange, 'cm')}

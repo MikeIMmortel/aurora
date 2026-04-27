@@ -40,7 +40,7 @@ export function CompareTable({ left, right }: Props) {
     <div className="bg-aurora-surface border border-aurora-border rounded-xl overflow-hidden">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-aurora-border text-gray-400">
+          <tr className="border-b border-aurora-border text-ink-3">
             <th className="text-left px-6 py-3 font-medium"></th>
             <th className="text-right px-4 py-3 font-medium">{formatDate(left.date)}</th>
             <th className="text-right px-4 py-3 font-medium">{formatDate(right.date)}</th>
@@ -52,12 +52,12 @@ export function CompareTable({ left, right }: Props) {
             const delta = row.rightVal - row.leftVal;
             const isImproved = row.decreaseIsGood ? delta < 0 : delta > 0;
             const isNeutral = Math.abs(delta) < 0.05;
-            const colorClass = isNeutral ? 'text-gray-400' : isImproved ? 'text-positive' : 'text-negative';
+            const colorClass = isNeutral ? 'text-ink-3' : isImproved ? 'text-positive' : 'text-negative';
             const sign = delta > 0 ? '+' : '';
 
             return (
               <tr key={row.label} className="border-b border-aurora-border/50 hover:bg-aurora-surface-hover transition-colors">
-                <td className="px-6 py-2.5 font-medium text-gray-300">{row.label}</td>
+                <td className="px-6 py-2.5 font-medium text-ink-2">{row.label}</td>
                 <td className="text-right px-4 py-2.5">{row.leftVal} {row.unit}</td>
                 <td className="text-right px-4 py-2.5">{row.rightVal} {row.unit}</td>
                 <td className={`text-right px-6 py-2.5 font-medium ${colorClass}`}>

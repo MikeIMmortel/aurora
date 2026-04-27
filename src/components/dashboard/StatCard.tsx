@@ -10,7 +10,7 @@ interface StatCardProps {
 
 export default function StatCard({ label, value, unit, delta, improved, subtitle, unitColor }: StatCardProps) {
   const deltaColor =
-    improved === null ? 'text-gray-400' : improved ? 'text-[#4ADE80]' : 'text-[#F87171]';
+    improved === null ? 'text-ink-3' : improved ? 'text-positive' : 'text-negative';
 
   const arrow =
     delta === null
@@ -30,11 +30,11 @@ export default function StatCard({ label, value, unit, delta, improved, subtitle
       : null;
 
   return (
-    <div className="rounded-2xl border border-[#2A2A2A] bg-[#1A1A1A] p-4 flex flex-col gap-1">
-      <span className="text-sm text-gray-400 font-medium">{label}</span>
-      <span className="text-2xl font-bold text-white">
+    <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-4 flex flex-col gap-1">
+      <span className="text-sm text-ink-3 font-medium">{label}</span>
+      <span className="text-2xl font-bold text-ink">
         {formattedValue}
-        <span className={`text-base font-normal ml-1 ${unitColor ?? 'text-gray-400'}`}>{unit}</span>
+        <span className={`text-base font-normal ml-1 ${unitColor ?? 'text-ink-3'}`}>{unit}</span>
       </span>
       {delta !== null && (
         <span className={`text-sm font-medium ${deltaColor} flex items-center gap-1`}>
@@ -43,7 +43,7 @@ export default function StatCard({ label, value, unit, delta, improved, subtitle
         </span>
       )}
       {subtitle && (
-        <span className="text-xs text-gray-500 mt-0.5">{subtitle}</span>
+        <span className="text-xs text-ink-3 mt-0.5">{subtitle}</span>
       )}
     </div>
   );

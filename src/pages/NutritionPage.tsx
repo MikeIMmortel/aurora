@@ -23,7 +23,7 @@ export function NutritionPage({ measurements }: Props) {
   if (!latest) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-gray-500">
+        <p className="text-ink-3">
           Geen metingen gevonden. Importeer eerst een PDF om voedings-doelen te berekenen.
         </p>
       </div>
@@ -37,7 +37,7 @@ export function NutritionPage({ measurements }: Props) {
     <div className="space-y-6 max-w-5xl">
       <div>
         <h2 className="text-xl font-semibold">Voeding</h2>
-        <p className="text-sm text-gray-400 mt-1">
+        <p className="text-sm text-ink-3 mt-1">
           Berekend uit je meting van {formatDate(latest.date)} · vetvrije massa{' '}
           <span className="text-aurora-gold">{latest.leanMass.toFixed(1)} kg</span>
         </p>
@@ -107,9 +107,9 @@ export function NutritionPage({ measurements }: Props) {
 
       <ProteinSources />
 
-      <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 text-xs text-gray-500 leading-relaxed">
+      <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 text-xs text-ink-3 leading-relaxed">
         <p className="mb-2">
-          <span className="text-gray-400 font-medium">Hoe dit wordt berekend:</span>{' '}
+          <span className="text-ink-3 font-medium">Hoe dit wordt berekend:</span>{' '}
           BMR = 370 + 21,6 × vetvrije massa (Katch-McArdle, nauwkeuriger dan Harris-Benedict
           omdat je spiermassa bekend is). TDEE = BMR × activiteitsfactor. Doel bepaalt of er
           een tekort of overschot wordt opgeteld. Eiwit en vet zijn per kg lichaamsgewicht;
@@ -138,12 +138,12 @@ function InfoTile({
 }) {
   return (
     <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-4 flex flex-col gap-1">
-      <span className="text-xs uppercase tracking-wider text-gray-500">{label}</span>
+      <span className="text-xs uppercase tracking-wider text-ink-3">{label}</span>
       <span className="text-2xl font-bold">
         {value}
-        <span className="text-sm text-gray-400 ml-1">{unit}</span>
+        <span className="text-sm text-ink-3 ml-1">{unit}</span>
       </span>
-      <span className="text-xs text-gray-500">{sub}</span>
+      <span className="text-xs text-ink-3">{sub}</span>
     </div>
   );
 }

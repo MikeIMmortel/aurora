@@ -44,16 +44,16 @@ export function PdfDropzone({ onFileSelected, isLoading }: Props) {
         {isLoading ? (
           <>
             <div className="w-12 h-12 border-2 border-aurora-gold border-t-transparent rounded-full animate-spin" />
-            <p className="text-gray-400">PDF wordt gelezen...</p>
+            <p className="text-ink-3">PDF wordt gelezen...</p>
           </>
         ) : (
           <>
             <div className="w-16 h-16 rounded-full bg-aurora-surface flex items-center justify-center">
-              {isDragging ? <FileText size={28} className="text-aurora-gold" /> : <Upload size={28} className="text-gray-400" />}
+              {isDragging ? <FileText size={28} className="text-aurora-gold" /> : <Upload size={28} className="text-ink-3" />}
             </div>
             <div>
-              <p className="text-gray-200 font-medium">Sleep je PDF hier naartoe</p>
-              <p className="text-gray-500 text-sm mt-1">of klik om een bestand te kiezen</p>
+              <p className="text-ink font-medium">Sleep je PDF hier naartoe</p>
+              <p className="text-ink-3 text-sm mt-1">of klik om een bestand te kiezen</p>
             </div>
           </>
         )}

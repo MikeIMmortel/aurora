@@ -23,7 +23,7 @@ export function GoalsPage({ goals, addGoal, deleteGoal, getFirst, getLatest }: P
       <GoalForm onAdd={addGoal} existingFields={existingFields} />
 
       {goals.length === 0 ? (
-        <div className="text-gray-500 py-8 text-center">
+        <div className="text-ink-3 py-8 text-center">
           <p>Nog geen doelen ingesteld.</p>
           <p className="text-sm mt-1">Stel een doel in om je voortgang te meten.</p>
         </div>

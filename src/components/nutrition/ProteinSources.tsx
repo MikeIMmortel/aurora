@@ -57,8 +57,8 @@ export default function ProteinSources() {
   return (
     <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 flex flex-col gap-5">
       <div>
-        <h3 className="text-lg font-semibold text-white">Eiwitbronnen — kant-en-klaar</h3>
-        <p className="text-xs text-gray-400 mt-0.5">
+        <h3 className="text-lg font-semibold text-ink">Eiwitbronnen — kant-en-klaar</h3>
+        <p className="text-xs text-ink-3 mt-0.5">
           Snel te combineren tot je dag-target. Kies 3–4 per dag.
         </p>
       </div>
@@ -73,17 +73,17 @@ export default function ProteinSources() {
                 className="flex items-start justify-between gap-4 py-2"
               >
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-gray-100">{item.name}</div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-sm font-medium text-ink">{item.name}</div>
+                  <div className="text-xs text-ink-3">
                     {item.portion}
-                    {item.note && <span className="text-gray-600"> · {item.note}</span>}
+                    {item.note && <span className="text-ink-4"> · {item.note}</span>}
                   </div>
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="text-sm font-semibold text-[#4ADE80]">
+                  <div className="text-sm font-semibold text-positive">
                     {item.protein} g
                   </div>
-                  <div className="text-xs text-gray-500">{item.kcal} kcal</div>
+                  <div className="text-xs text-ink-3">{item.kcal} kcal</div>
                 </div>
               </div>
             ))}

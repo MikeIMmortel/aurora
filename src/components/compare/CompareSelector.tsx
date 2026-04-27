@@ -22,7 +22,7 @@ export function CompareSelector({ measurements, leftDate, rightDate, onLeftChang
         ))}
       </select>
 
-      <span className="text-gray-500 font-medium">vs</span>
+      <span className="text-ink-3 font-medium">vs</span>
 
       <select
         value={rightDate}

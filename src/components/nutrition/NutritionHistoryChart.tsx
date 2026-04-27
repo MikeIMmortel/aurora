@@ -52,18 +52,16 @@ function buildRange(days: number, intakes: DailyIntake[]): Row[] {
 }
 
 function barColor(value: number, target: number, metric: Metric): string {
-  if (value === 0) return '#2A2A2A';
+  if (value === 0) return 'var(--color-rule-2)';
   const pct = value / target;
   if (metric === 'kcal') {
-    // Voor kcal is 90–110% ideaal; te veel is ook niet goed
-    if (pct >= 0.9 && pct <= 1.1) return '#4ADE80';
-    if (pct >= 0.75 && pct <= 1.25) return '#C8A55C';
-    return '#F87171';
+    if (pct >= 0.9 && pct <= 1.1) return 'var(--color-positive)';
+    if (pct >= 0.75 && pct <= 1.25) return 'var(--color-aurora-gold)';
+    return 'var(--color-negative)';
   }
-  // Eiwit: meer is beter (tot op zekere hoogte)
-  if (pct >= 0.95) return '#4ADE80';
-  if (pct >= 0.7) return '#C8A55C';
-  return '#F87171';
+  if (pct >= 0.95) return 'var(--color-positive)';
+  if (pct >= 0.7) return 'var(--color-aurora-gold)';
+  return 'var(--color-negative)';
 }
 
 export default function NutritionHistoryChart({
@@ -99,33 +97,33 @@ export default function NutritionHistoryChart({
     <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 flex flex-col gap-4">
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <h3 className="text-lg font-semibold text-white">Laatste {days} dagen</h3>
-          <p className="text-xs text-gray-400 mt-0.5">
+          <h3 className="text-lg font-semibold text-ink">Laatste {days} dagen</h3>
+          <p className="text-xs text-ink-3 mt-0.5">
             Target: {target} {unit} per dag
             {metric === 'kcal' && ' (trainingsdag · ±10% is goed)'}
           </p>
         </div>
 
-        <div className="flex gap-1 p-1 bg-aurora-black rounded-lg border border-aurora-border">
+        <div className="flex gap-1 p-1 rounded-lg" style={{ background: 'var(--color-bg-sunken)', border: '1px solid var(--color-rule)' }}>
           <button
             type="button"
             onClick={() => setMetric('protein')}
-            className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
-              metric === 'protein'
-                ? 'bg-aurora-gold/20 text-aurora-gold-light'
-                : 'text-gray-500 hover:text-gray-300'
-            }`}
+            className="px-3 py-1 rounded-md text-xs font-medium transition-colors font-mono uppercase tracking-wider"
+            style={{
+              background: metric === 'protein' ? 'var(--color-ink)' : 'transparent',
+              color: metric === 'protein' ? 'var(--color-bg)' : 'var(--color-ink-3)',
+            }}
           >
             Eiwit
           </button>
           <button
             type="button"
             onClick={() => setMetric('kcal')}
-            className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
-              metric === 'kcal'
-                ? 'bg-aurora-gold/20 text-aurora-gold-light'
-                : 'text-gray-500 hover:text-gray-300'
-            }`}
+            className="px-3 py-1 rounded-md text-xs font-medium transition-colors font-mono uppercase tracking-wider"
+            style={{
+              background: metric === 'kcal' ? 'var(--color-ink)' : 'transparent',
+              color: metric === 'kcal' ? 'var(--color-bg)' : 'var(--color-ink-3)',
+            }}
           >
             Kcal
           </button>
@@ -135,20 +133,20 @@ export default function NutritionHistoryChart({
       {hasData && (
         <div className="flex gap-6 text-sm">
           <div>
-            <div className="text-xs uppercase tracking-wider text-gray-500">Gem.</div>
-            <div className="text-lg font-semibold text-white tabular-nums">
+            <div className="text-xs uppercase tracking-wider text-ink-3">Gem.</div>
+            <div className="text-lg font-semibold text-ink tabular-nums">
               {avg} {unit}
             </div>
           </div>
           <div>
-            <div className="text-xs uppercase tracking-wider text-gray-500">In zone</div>
-            <div className="text-lg font-semibold text-[#4ADE80] tabular-nums">
+            <div className="text-xs uppercase tracking-wider text-ink-3">In zone</div>
+            <div className="text-lg font-semibold text-positive tabular-nums">
               {daysOnTarget}/{loggedDays.length || days}
             </div>
           </div>
           {metric === 'protein' && (
             <div>
-              <div className="text-xs uppercase tracking-wider text-gray-500">Streak</div>
+              <div className="text-xs uppercase tracking-wider text-ink-3">Streak</div>
               <div className="text-lg font-semibold text-aurora-gold tabular-nums flex items-center gap-1">
                 {computeProteinStreak(intakes, proteinTarget)}
                 {computeProteinStreak(intakes, proteinTarget) >= 3 && <span>🔥</span>}
@@ -159,7 +157,7 @@ export default function NutritionHistoryChart({
       )}
 
       {!hasData ? (
-        <div className="h-48 flex items-center justify-center text-gray-500 text-sm text-center px-4">
+        <div className="h-48 flex items-center justify-center text-ink-3 text-sm text-center px-4">
           Nog geen log-data. Log vandaag je eerste eiwit + kcal via de snel-knoppen hierboven.
         </div>
       ) : (
@@ -168,26 +166,29 @@ export default function NutritionHistoryChart({
             <BarChart data={data} margin={{ top: 8, right: 8, left: -10, bottom: 0 }}>
               <XAxis
                 dataKey="label"
-                stroke="#6B7280"
+                stroke="var(--color-ink-4)"
                 fontSize={10}
                 tickLine={false}
-                axisLine={{ stroke: '#2A2A2A' }}
+                axisLine={{ stroke: 'var(--color-ink-4)' }}
+                tick={{ fill: 'var(--color-ink-3)', fontFamily: 'var(--font-mono)' }}
                 interval="preserveStartEnd"
               />
               <YAxis
-                stroke="#6B7280"
+                stroke="var(--color-ink-4)"
                 fontSize={10}
                 tickLine={false}
-                axisLine={{ stroke: '#2A2A2A' }}
+                axisLine={{ stroke: 'var(--color-ink-4)' }}
+                tick={{ fill: 'var(--color-ink-3)', fontFamily: 'var(--font-mono)' }}
               />
               <Tooltip
-                cursor={{ fill: '#222222' }}
+                cursor={{ fill: 'var(--color-bg-sunken)' }}
                 contentStyle={{
-                  backgroundColor: '#1A1A1A',
-                  border: '1px solid #2A2A2A',
-                  borderRadius: '0.5rem',
-                  color: '#fff',
+                  backgroundColor: 'var(--color-bg-card)',
+                  border: '1px solid var(--color-rule-2)',
+                  borderRadius: '8px',
+                  color: 'var(--color-ink)',
                   fontSize: '12px',
+                  fontFamily: 'var(--font-mono)',
                 }}
                 formatter={
                   ((value: number) => [`${value} ${unit}`, metric === 'protein' ? 'Eiwit' : 'Kcal']) as unknown as undefined
@@ -196,7 +197,7 @@ export default function NutritionHistoryChart({
               />
               <ReferenceLine
                 y={target}
-                stroke="#C8A55C"
+                stroke="var(--color-aurora-gold)"
                 strokeDasharray="4 4"
                 strokeWidth={1}
               />

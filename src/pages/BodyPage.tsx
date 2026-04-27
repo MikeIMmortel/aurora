@@ -29,10 +29,10 @@ export function BodyPage({ measurements }: BodyPageProps) {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center space-y-3">
-          <p className="text-gray-400 text-lg">
+          <p className="text-ink-3 text-lg">
             Minimaal 2 metingen nodig voor de 3D vergelijking.
           </p>
-          <p className="text-gray-500 text-sm">
+          <p className="text-ink-3 text-sm">
             Importeer meer metingen via de Import-pagina.
           </p>
         </div>
@@ -54,7 +54,7 @@ export function BodyPage({ measurements }: BodyPageProps) {
       {/* Meting selectors */}
       <div className="flex flex-wrap items-center gap-3 shrink-0">
         <div className="flex items-center gap-2">
-          <label className="text-xs uppercase tracking-wider text-gray-500">
+          <label className="text-xs uppercase tracking-wider text-ink-3">
             Meting A
           </label>
           <select
@@ -63,7 +63,7 @@ export function BodyPage({ measurements }: BodyPageProps) {
               setIdxA(Number(e.target.value));
               setT(0);
             }}
-            className="bg-[#1A1A1A] border border-[#2A2A2A] text-white text-sm rounded-lg px-3 py-2 focus:border-aurora-gold focus:outline-none"
+            className="bg-aurora-surface border border-aurora-border text-ink text-sm rounded-lg px-3 py-2 focus:border-aurora-gold focus:outline-none"
           >
             {sorted.map((m, i) => (
               <option key={m.id} value={i}>
@@ -76,7 +76,7 @@ export function BodyPage({ measurements }: BodyPageProps) {
         <span className="text-aurora-gold font-semibold text-lg">vs</span>
 
         <div className="flex items-center gap-2">
-          <label className="text-xs uppercase tracking-wider text-gray-500">
+          <label className="text-xs uppercase tracking-wider text-ink-3">
             Meting B
           </label>
           <select
@@ -85,7 +85,7 @@ export function BodyPage({ measurements }: BodyPageProps) {
               setIdxB(Number(e.target.value));
               setT(0);
             }}
-            className="bg-[#1A1A1A] border border-[#2A2A2A] text-white text-sm rounded-lg px-3 py-2 focus:border-aurora-gold focus:outline-none"
+            className="bg-aurora-surface border border-aurora-border text-ink text-sm rounded-lg px-3 py-2 focus:border-aurora-gold focus:outline-none"
           >
             {sorted.map((m, i) => (
               <option key={m.id} value={i}>
@@ -99,7 +99,7 @@ export function BodyPage({ measurements }: BodyPageProps) {
       {/* Main content: 3D canvas + labels */}
       <div className="flex-1 flex flex-col lg:flex-row gap-4 min-h-0">
         {/* 3D Canvas */}
-        <div className="flex-1 rounded-2xl border border-[#2A2A2A] bg-[#1A1A1A] overflow-hidden min-h-[400px] lg:min-h-0">
+        <div className="flex-1 rounded-2xl border border-aurora-border bg-aurora-surface overflow-hidden min-h-[400px] lg:min-h-0">
           <BodyScene params={bodyParams} />
         </div>
 
@@ -108,8 +108,8 @@ export function BodyPage({ measurements }: BodyPageProps) {
           <MeasurementLabels measurement={interpolated} label="Huidige waarden" />
 
           {/* Delta paneel */}
-          <div className="rounded-2xl border border-[#2A2A2A] bg-[#1A1A1A] p-4">
-            <h4 className="text-xs uppercase tracking-wider text-gray-500 mb-3">
+          <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-4">
+            <h4 className="text-xs uppercase tracking-wider text-ink-3 mb-3">
               Verschil A → B
             </h4>
             <div className="space-y-1.5">
@@ -174,7 +174,7 @@ function DeltaRow({
   const isPositive = invert ? delta < 0 : delta > 0;
   const isNeutral = Math.abs(delta) < 0.05;
   const color = isNeutral
-    ? 'text-gray-400'
+    ? 'text-ink-3'
     : isPositive
       ? 'text-positive'
       : 'text-negative';
@@ -182,7 +182,7 @@ function DeltaRow({
 
   return (
     <div className="flex items-center justify-between py-1">
-      <span className="text-gray-400 text-sm">{name}</span>
+      <span className="text-ink-3 text-sm">{name}</span>
       <span className={`font-medium text-sm tabular-nums ${color}`}>
         {sign}
         {delta.toFixed(1)} {unit}

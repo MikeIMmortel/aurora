@@ -19,7 +19,7 @@ export default function MorphSlider({ value, onChange, dateA, dateB }: MorphSlid
         onChange={(e) => onChange(Number(e.target.value))}
         className="morph-slider w-full"
       />
-      <div className="flex justify-between mt-1 text-xs text-gray-400">
+      <div className="flex justify-between mt-1 text-xs text-ink-3">
         <span>{formatDate(dateA)}</span>
         <span>{formatDate(dateB)}</span>
       </div>

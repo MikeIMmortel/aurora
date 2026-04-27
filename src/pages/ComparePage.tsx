@@ -15,7 +15,7 @@ export function ComparePage({ measurements }: Props) {
     return (
       <div className="space-y-6 max-w-4xl">
         <h2 className="text-xl font-semibold">Metingen vergelijken</h2>
-        <p className="text-gray-500">Je hebt minimaal 2 metingen nodig om te vergelijken.</p>
+        <p className="text-ink-3">Je hebt minimaal 2 metingen nodig om te vergelijken.</p>
       </div>
     );
   }

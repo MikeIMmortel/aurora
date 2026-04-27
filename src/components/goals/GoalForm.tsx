@@ -41,7 +41,7 @@ export function GoalForm({ onAdd, existingFields }: Props) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 px-4 py-2 border border-dashed border-aurora-border rounded-lg text-gray-400 hover:text-aurora-gold hover:border-aurora-gold/50 transition-colors"
+        className="flex items-center gap-2 px-4 py-2 border border-dashed border-aurora-border rounded-lg text-ink-3 hover:text-aurora-gold hover:border-aurora-gold/50 transition-colors"
       >
         <Plus size={16} />
         Doel toevoegen
@@ -70,7 +70,7 @@ export function GoalForm({ onAdd, existingFields }: Props) {
           className="w-32 bg-aurora-black border border-aurora-border rounded-lg px-3 py-2 text-sm focus:border-aurora-gold focus:outline-none"
           required
         />
-        <span className="text-gray-400 text-sm">{GOAL_FIELD_UNITS[field]}</span>
+        <span className="text-ink-3 text-sm">{GOAL_FIELD_UNITS[field]}</span>
       </div>
       <div className="flex gap-2">
         <button
@@ -82,7 +82,7 @@ export function GoalForm({ onAdd, existingFields }: Props) {
         <button
           type="button"
           onClick={() => setIsOpen(false)}
-          className="px-4 py-2 border border-aurora-border rounded-lg text-gray-400 text-sm hover:text-gray-200 transition-colors"
+          className="px-4 py-2 border border-aurora-border rounded-lg text-ink-3 text-sm hover:text-ink transition-colors"
         >
           Annuleren
         </button>

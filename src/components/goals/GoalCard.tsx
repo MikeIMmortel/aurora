@@ -34,20 +34,20 @@ export function GoalCard({ goal, first, latest, onDelete }: Props) {
       <div className="flex items-start justify-between">
         <div>
           <h4 className="font-medium">{GOAL_FIELD_LABELS[goal.field]}</h4>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-ink-3">
             Doel: {targetValue} {goal.unit} | Huidig: {currentValue} {goal.unit}
           </p>
         </div>
         <button
           onClick={() => onDelete(goal.id)}
-          className="text-gray-500 hover:text-negative transition-colors p-1"
+          className="text-ink-3 hover:text-negative transition-colors p-1"
         >
           <Trash2 size={14} />
         </button>
       </div>
 
       <div className="space-y-1.5">
-        <div className="flex justify-between text-xs text-gray-400">
+        <div className="flex justify-between text-xs text-ink-3">
           <span>Start: {startValue} {goal.unit}</span>
           <span>{isGoalReached ? 'Bereikt!' : `Nog ${Math.abs(remaining).toFixed(1)} ${goal.unit} te gaan`}</span>
         </div>
@@ -59,7 +59,7 @@ export function GoalCard({ goal, first, latest, onDelete }: Props) {
             style={{ width: `${clampedProgress}%` }}
           />
         </div>
-        <div className="text-right text-xs text-gray-500">
+        <div className="text-right text-xs text-ink-3">
           {clampedProgress.toFixed(0)}%
         </div>
       </div>

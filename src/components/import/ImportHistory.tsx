@@ -20,7 +20,7 @@ export function ImportHistory({ measurements, onDelete }: Props) {
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-aurora-border text-gray-400">
+            <tr className="border-b border-aurora-border text-ink-3">
               <th className="text-left px-6 py-3 font-medium">Datum</th>
               <th className="text-right px-4 py-3 font-medium">Gewicht</th>
               <th className="text-right px-4 py-3 font-medium">Vet%</th>
@@ -40,7 +40,7 @@ export function ImportHistory({ measurements, onDelete }: Props) {
                 <td className="text-right px-6 py-3">
                   <button
                     onClick={() => onDelete(m.id)}
-                    className="text-gray-500 hover:text-negative transition-colors p-1"
+                    className="text-ink-3 hover:text-negative transition-colors p-1"
                     title="Verwijderen"
                   >
                     <Trash2 size={14} />

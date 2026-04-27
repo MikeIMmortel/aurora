@@ -59,13 +59,13 @@ function CategorySpectrum({ benchmark }: { benchmark: Benchmark }) {
         style={{ left: `${valuePct}%`, top: '20px' }}
       >
         <div className="w-0 h-0 border-l-[5px] border-r-[5px] border-b-[6px] border-l-transparent border-r-transparent border-b-white" />
-        <span className="text-[9px] uppercase tracking-wider text-white font-bold mt-0.5">
+        <span className="text-[9px] uppercase tracking-wider text-ink font-bold mt-0.5">
           jij
         </span>
       </div>
 
       {/* Threshold labels onder de balk */}
-      <div className="relative h-4 mt-7 text-[10px] text-gray-500">
+      <div className="relative h-4 mt-7 text-[10px] text-ink-3">
         {segments.map((seg, i) => {
           if (!seg.label) return null;
           const center = seg.startPct + seg.widthPct / 2;
@@ -132,8 +132,8 @@ export default function BenchmarkCard({ benchmark }: Props) {
     <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 flex flex-col gap-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <h3 className="text-base font-semibold text-white">{benchmark.metric}</h3>
-          <p className="text-xs text-gray-400 mt-0.5">{benchmark.description}</p>
+          <h3 className="text-base font-semibold text-ink">{benchmark.metric}</h3>
+          <p className="text-xs text-ink-3 mt-0.5">{benchmark.description}</p>
         </div>
         <div className="text-right shrink-0 flex flex-col items-end">
           <div className="flex items-baseline gap-3">
@@ -145,10 +145,10 @@ export default function BenchmarkCard({ benchmark }: Props) {
               </div>
             </div>
             <div className="text-right">
-              <div className="text-[9px] uppercase tracking-wider text-white/60 font-bold">Jij</div>
-              <div className="text-2xl font-bold tabular-nums text-white">
+              <div className="text-[9px] uppercase tracking-wider text-ink/60 font-bold">Jij</div>
+              <div className="text-2xl font-bold tabular-nums text-ink">
                 {formatValue(benchmark.value, benchmark.unit)}
-                {benchmark.unit && <span className="text-sm text-gray-400 ml-1">{benchmark.unit}</span>}
+                {benchmark.unit && <span className="text-sm text-ink-3 ml-1">{benchmark.unit}</span>}
               </div>
             </div>
           </div>
@@ -170,13 +170,13 @@ export default function BenchmarkCard({ benchmark }: Props) {
         {deltaText}
       </div>
 
-      <div className="text-xs text-gray-500 leading-relaxed pt-2 border-t border-aurora-border/50">
+      <div className="text-xs text-ink-3 leading-relaxed pt-2 border-t border-aurora-border/50">
         <div className="mb-1">
           <span className="text-aurora-gold-light font-medium">Waarom dit ideaal:</span>{' '}
           {benchmark.idealNote}
         </div>
         {benchmark.context}
-        <div className="text-gray-600 mt-1 italic">Bron: {benchmark.source}</div>
+        <div className="text-ink-4 mt-1 italic">Bron: {benchmark.source}</div>
       </div>
     </div>
   );

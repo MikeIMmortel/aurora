@@ -29,27 +29,27 @@ function ProgressRow({
   const status = pct >= 95 ? 'green' : pct >= 70 ? 'amber' : current > 0 ? 'red' : 'neutral';
   const barColor =
     status === 'green'
-      ? 'bg-[#4ADE80]'
+      ? 'var(--color-positive)'
       : status === 'amber'
-        ? 'bg-aurora-gold'
+        ? 'var(--color-aurora-gold)'
         : status === 'red'
-          ? 'bg-[#F87171]'
-          : 'bg-gray-600';
+          ? 'var(--color-negative)'
+          : 'var(--color-ink-4)';
 
   return (
     <div>
       <div className="flex items-baseline justify-between mb-1.5">
-        <span className="text-xs uppercase tracking-wider text-gray-500">{label}</span>
+        <span className="text-xs uppercase tracking-wider text-ink-3">{label}</span>
         <span className="text-sm tabular-nums">
-          <span className="text-white font-semibold">{Math.round(current)}</span>
-          <span className="text-gray-500"> / {target} {unit}</span>
-          <span className="text-gray-600 ml-2">{pct}%</span>
+          <span className="text-ink font-semibold">{Math.round(current)}</span>
+          <span className="text-ink-3"> / {target} {unit}</span>
+          <span className="text-ink-4 ml-2">{pct}%</span>
         </span>
       </div>
-      <div className="h-2 rounded-full bg-aurora-black overflow-hidden">
+      <div className="h-2 rounded-full bg-bg-sunken overflow-hidden">
         <div
-          className={`h-full ${barColor} transition-all duration-300`}
-          style={{ width: `${pct}%` }}
+          className="h-full transition-all duration-300"
+          style={{ width: `${pct}%`, background: barColor }}
         />
       </div>
     </div>
@@ -88,8 +88,8 @@ export default function TodayIntake({
     <div className="rounded-2xl border border-aurora-gold/60 bg-aurora-surface p-5 flex flex-col gap-5">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-lg font-semibold text-white">Vandaag</h3>
-          <p className="text-xs text-gray-400 mt-0.5">
+          <h3 className="text-lg font-semibold text-ink">Vandaag</h3>
+          <p className="text-xs text-ink-3 mt-0.5">
             Tap een snel-knop na elke maaltijd — eiwit en kcal worden samen gelogd
           </p>
         </div>
@@ -98,7 +98,7 @@ export default function TodayIntake({
           onClick={() => {
             if (confirm('Vandaag resetten?')) onReset();
           }}
-          className="text-gray-500 hover:text-gray-300 p-2 -m-2"
+          className="text-ink-3 hover:text-ink-2 p-2 -m-2"
           title="Vandaag resetten"
           aria-label="Reset"
         >
@@ -122,7 +122,7 @@ export default function TodayIntake({
       </div>
 
       <div>
-        <p className="text-xs uppercase tracking-wider text-gray-500 mb-2">Snel toevoegen</p>
+        <p className="text-xs uppercase tracking-wider text-ink-3 mb-2">Snel toevoegen</p>
         <div className="flex flex-wrap gap-2">
           {quickAdds.map((q) => (
             <button
@@ -132,13 +132,13 @@ export default function TodayIntake({
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm transition-colors ${
                 q.id.startsWith('custom-')
                   ? 'border-aurora-gold/40 bg-aurora-gold/5 hover:border-aurora-gold'
-                  : 'border-aurora-border bg-aurora-black/40 hover:border-aurora-gold'
+                  : 'border-aurora-border bg-bg-sunken hover:border-aurora-gold'
               }`}
               title={`${q.portion} · +${q.proteinG} g eiwit · +${q.kcal} kcal`}
             >
               <Plus size={12} className="text-aurora-gold" />
-              <span className="text-white font-medium">{q.label}</span>
-              <span className="text-gray-500 text-xs hidden sm:inline">
+              <span className="text-ink font-medium">{q.label}</span>
+              <span className="text-ink-3 text-xs hidden sm:inline">
                 +{q.proteinG}g · {q.kcal}kcal
               </span>
             </button>
@@ -148,7 +148,7 @@ export default function TodayIntake({
 
       <form onSubmit={submitCustom} className="flex flex-wrap gap-2 items-end">
         <div className="flex-1 min-w-[100px]">
-          <label className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">
+          <label className="text-[10px] uppercase tracking-wider text-ink-3 block mb-1">
             Eiwit (g)
           </label>
           <input
@@ -161,7 +161,7 @@ export default function TodayIntake({
           />
         </div>
         <div className="flex-1 min-w-[100px]">
-          <label className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">
+          <label className="text-[10px] uppercase tracking-wider text-ink-3 block mb-1">
             Kcal
           </label>
           <input
@@ -181,7 +181,7 @@ export default function TodayIntake({
         </button>
       </form>
 
-      <div className="flex gap-2 text-xs text-gray-500">
+      <div className="flex gap-2 text-xs text-ink-3">
         <button
           type="button"
           onClick={() => {
@@ -191,11 +191,11 @@ export default function TodayIntake({
               if (!isNaN(n)) onSetProtein(n);
             }
           }}
-          className="hover:text-gray-300"
+          className="hover:text-ink-2"
         >
           Eiwit-totaal zetten
         </button>
-        <span className="text-gray-700">·</span>
+        <span className="text-ink-4">·</span>
         <button
           type="button"
           onClick={() => {
@@ -205,7 +205,7 @@ export default function TodayIntake({
               if (!isNaN(n)) onSetKcal(n);
             }
           }}
-          className="hover:text-gray-300"
+          className="hover:text-ink-2"
         >
           Kcal-totaal zetten
         </button>

@@ -65,9 +65,9 @@ interface DeltaTileProps {
 function DeltaTile({ label, current, previous, unit, higherIsBetter = true, target }: DeltaTileProps) {
   if (current === null) {
     return (
-      <div className="rounded-xl border border-aurora-border bg-aurora-black/40 p-4">
-        <div className="text-xs uppercase tracking-wider text-gray-500 mb-1">{label}</div>
-        <div className="text-sm text-gray-600">Geen data deze week</div>
+      <div className="rounded-xl border border-aurora-border bg-bg-sunken p-4">
+        <div className="text-xs uppercase tracking-wider text-ink-3 mb-1">{label}</div>
+        <div className="text-sm text-ink-4">Geen data deze week</div>
       </div>
     );
   }
@@ -88,12 +88,12 @@ function DeltaTile({ label, current, previous, unit, higherIsBetter = true, targ
 
   const trendColor =
     improved === null
-      ? 'text-gray-500'
+      ? 'text-ink-3'
       : improved
-        ? 'text-[#4ADE80]'
+        ? 'text-positive'
         : Math.abs(delta ?? 0) < 5
-          ? 'text-gray-400'
-          : 'text-[#F87171]';
+          ? 'text-ink-3'
+          : 'text-negative';
 
   const Icon =
     delta === null || Math.abs(delta) < 2
@@ -103,11 +103,11 @@ function DeltaTile({ label, current, previous, unit, higherIsBetter = true, targ
         : TrendingDown;
 
   return (
-    <div className="rounded-xl border border-aurora-border bg-aurora-black/40 p-4 flex flex-col gap-1">
-      <div className="text-xs uppercase tracking-wider text-gray-500">{label}</div>
-      <div className="text-2xl font-bold text-white tabular-nums">
+    <div className="rounded-xl border border-aurora-border bg-bg-sunken p-4 flex flex-col gap-1">
+      <div className="text-xs uppercase tracking-wider text-ink-3">{label}</div>
+      <div className="text-2xl font-bold text-ink tabular-nums">
         {current}
-        <span className="text-sm text-gray-400 ml-1">{unit}</span>
+        <span className="text-sm text-ink-3 ml-1">{unit}</span>
       </div>
       {delta !== null && previous !== null && (
         <div className={`flex items-center gap-1 text-xs font-medium ${trendColor}`}>
@@ -119,7 +119,7 @@ function DeltaTile({ label, current, previous, unit, higherIsBetter = true, targ
         </div>
       )}
       {delta !== null && previous === null && (
-        <div className="text-xs text-gray-600">Vorige week: geen data</div>
+        <div className="text-xs text-ink-4">Vorige week: geen data</div>
       )}
     </div>
   );
@@ -138,14 +138,14 @@ export default function WeeklyReview({ intakes, proteinTarget, kcalTarget }: Pro
   return (
     <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 flex flex-col gap-4">
       <div>
-        <h3 className="text-lg font-semibold text-white">Weekoverzicht</h3>
-        <p className="text-xs text-gray-400 mt-0.5">
+        <h3 className="text-lg font-semibold text-ink">Weekoverzicht</h3>
+        <p className="text-xs text-ink-3 mt-0.5">
           Laatste 7 dagen vs. week daarvoor
         </p>
       </div>
 
       {!hasAnyData ? (
-        <div className="h-24 flex items-center justify-center text-gray-500 text-sm text-center">
+        <div className="h-24 flex items-center justify-center text-ink-3 text-sm text-center">
           Log een week lang om trends te zien.
         </div>
       ) : (
@@ -168,9 +168,9 @@ export default function WeeklyReview({ intakes, proteinTarget, kcalTarget }: Pro
             />
           </div>
 
-          <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-aurora-border">
+          <div className="flex items-center justify-between text-xs text-ink-3 pt-2 border-t border-aurora-border">
             <span>
-              <span className="text-white font-medium">{thisWeek.onTargetDays}/7</span> dagen
+              <span className="text-ink font-medium">{thisWeek.onTargetDays}/7</span> dagen
               eiwit-target gehaald
             </span>
             {prevWeek.onTargetDays > 0 && (

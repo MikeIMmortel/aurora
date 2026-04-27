@@ -30,12 +30,12 @@ export function ParsePreview({ parsed, duplicates, onConfirm, onCancel }: Props)
             >
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium">{formatDate(m.date)}</span>
-                <span className="text-gray-400 text-sm">
+                <span className="text-ink-3 text-sm">
                   {m.weight} kg | {m.bodyFatPercentage}% | {m.leanMass} kg lean
                 </span>
               </div>
               {isDuplicate && (
-                <span className="text-xs text-gray-500 bg-aurora-border px-2 py-1 rounded">
+                <span className="text-xs text-ink-3 bg-aurora-border px-2 py-1 rounded">
                   Bestaat al
                 </span>
               )}
@@ -55,7 +55,7 @@ export function ParsePreview({ parsed, duplicates, onConfirm, onCancel }: Props)
           </button>
           <button
             onClick={onCancel}
-            className="flex items-center gap-2 px-4 py-2 border border-aurora-border rounded-lg text-gray-400 hover:text-gray-200 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 border border-aurora-border rounded-lg text-ink-3 hover:text-ink transition-colors"
           >
             <X size={16} />
             Annuleren
@@ -63,10 +63,10 @@ export function ParsePreview({ parsed, duplicates, onConfirm, onCancel }: Props)
         </div>
       ) : (
         <div className="flex items-center justify-between">
-          <p className="text-gray-500">Alle metingen bestaan al in je data.</p>
+          <p className="text-ink-3">Alle metingen bestaan al in je data.</p>
           <button
             onClick={onCancel}
-            className="px-4 py-2 border border-aurora-border rounded-lg text-gray-400 hover:text-gray-200 transition-colors"
+            className="px-4 py-2 border border-aurora-border rounded-lg text-ink-3 hover:text-ink transition-colors"
           >
             Sluiten
           </button>

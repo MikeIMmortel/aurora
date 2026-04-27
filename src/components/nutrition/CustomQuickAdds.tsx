@@ -37,8 +37,8 @@ export default function CustomQuickAdds({ items, onAdd, onDelete }: Props) {
   return (
     <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 flex flex-col gap-4">
       <div>
-        <h3 className="text-lg font-semibold text-white">Mijn snel-knoppen</h3>
-        <p className="text-xs text-gray-400 mt-0.5">
+        <h3 className="text-lg font-semibold text-ink">Mijn snel-knoppen</h3>
+        <p className="text-xs text-ink-3 mt-0.5">
           Voeg je eigen gerechten toe zodat je ze met 1 tap kunt loggen
         </p>
       </div>
@@ -48,25 +48,25 @@ export default function CustomQuickAdds({ items, onAdd, onDelete }: Props) {
           {items.map((item) => (
             <div key={item.id} className="flex items-center gap-3 py-2">
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-gray-100 truncate">
+                <div className="text-sm font-medium text-ink truncate">
                   {item.label}
                 </div>
                 {item.portion && (
-                  <div className="text-xs text-gray-500 truncate">{item.portion}</div>
+                  <div className="text-xs text-ink-3 truncate">{item.portion}</div>
                 )}
               </div>
               <div className="text-right shrink-0">
-                <div className="text-sm font-semibold text-[#4ADE80]">
+                <div className="text-sm font-semibold text-positive">
                   {item.proteinG} g
                 </div>
-                <div className="text-xs text-gray-500">{item.kcal} kcal</div>
+                <div className="text-xs text-ink-3">{item.kcal} kcal</div>
               </div>
               <button
                 type="button"
                 onClick={() => {
                   if (confirm(`"${item.label}" verwijderen?`)) onDelete(item.id);
                 }}
-                className="text-gray-600 hover:text-[#F87171] p-2"
+                className="text-ink-4 hover:text-negative p-2"
                 aria-label="Verwijderen"
               >
                 <Trash2 size={14} />
@@ -78,7 +78,7 @@ export default function CustomQuickAdds({ items, onAdd, onDelete }: Props) {
 
       <form onSubmit={handleSubmit} className="grid grid-cols-2 sm:grid-cols-4 gap-2 items-end">
         <div className="col-span-2 sm:col-span-1">
-          <label className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">
+          <label className="text-[10px] uppercase tracking-wider text-ink-3 block mb-1">
             Naam
           </label>
           <input
@@ -89,7 +89,7 @@ export default function CustomQuickAdds({ items, onAdd, onDelete }: Props) {
           />
         </div>
         <div className="col-span-2 sm:col-span-1">
-          <label className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">
+          <label className="text-[10px] uppercase tracking-wider text-ink-3 block mb-1">
             Portie
           </label>
           <input
@@ -100,7 +100,7 @@ export default function CustomQuickAdds({ items, onAdd, onDelete }: Props) {
           />
         </div>
         <div>
-          <label className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">
+          <label className="text-[10px] uppercase tracking-wider text-ink-3 block mb-1">
             Eiwit (g)
           </label>
           <input
@@ -113,7 +113,7 @@ export default function CustomQuickAdds({ items, onAdd, onDelete }: Props) {
           />
         </div>
         <div>
-          <label className="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">
+          <label className="text-[10px] uppercase tracking-wider text-ink-3 block mb-1">
             Kcal
           </label>
           <input

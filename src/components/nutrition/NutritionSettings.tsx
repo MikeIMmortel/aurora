@@ -26,7 +26,7 @@ const ACTIVITIES: ActivityLevel[] = [
 export default function NutritionSettings({ settings, onChange }: Props) {
   return (
     <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 flex flex-col gap-5">
-      <h3 className="text-lg font-semibold text-white">Instellingen</h3>
+      <h3 className="text-lg font-semibold text-ink">Instellingen</h3>
 
       <Field label="Doel">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -38,14 +38,14 @@ export default function NutritionSettings({ settings, onChange }: Props) {
               className={`text-left px-3 py-2 rounded-lg border text-sm transition-colors ${
                 settings.goal === goal
                   ? 'border-aurora-gold bg-aurora-gold/10 text-aurora-gold-light'
-                  : 'border-aurora-border text-gray-300 hover:border-gray-600'
+                  : 'border-aurora-border text-ink-2 hover:border-gray-600'
               }`}
             >
               <div className="font-medium">{GOAL_LABELS[goal]}</div>
             </button>
           ))}
         </div>
-        <p className="text-xs text-gray-500 mt-2">{GOAL_DESCRIPTIONS[settings.goal]}</p>
+        <p className="text-xs text-ink-3 mt-2">{GOAL_DESCRIPTIONS[settings.goal]}</p>
       </Field>
 
       <Field label="Activiteitsniveau">
@@ -63,7 +63,7 @@ export default function NutritionSettings({ settings, onChange }: Props) {
       </Field>
 
       <details className="text-sm">
-        <summary className="cursor-pointer text-gray-400 hover:text-gray-200 select-none">
+        <summary className="cursor-pointer text-ink-3 hover:text-ink select-none">
           Geavanceerd
         </summary>
         <div className="mt-3 grid grid-cols-2 gap-3">
@@ -98,7 +98,7 @@ export default function NutritionSettings({ settings, onChange }: Props) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-xs uppercase tracking-wider text-gray-500">{label}</label>
+      <label className="text-xs uppercase tracking-wider text-ink-3">{label}</label>
       {children}
     </div>
   );
