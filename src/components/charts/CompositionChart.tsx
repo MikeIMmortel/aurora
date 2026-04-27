@@ -9,6 +9,16 @@ import {
 } from 'recharts';
 import type { Measurement } from '../../types/measurement';
 import { formatShortDate } from '../../lib/utils';
+import {
+  chartColors,
+  chartCardStyle,
+  chartTitleStyle,
+  chartMetaStyle,
+  chartTickStyle,
+  chartAxisStyle,
+  chartTooltipStyle,
+  chartTooltipLabelStyle,
+} from './chartTheme';
 
 interface CompositionChartProps {
   measurements: Measurement[];
@@ -22,105 +32,77 @@ export default function CompositionChart({ measurements }: CompositionChartProps
   }));
 
   return (
-    <div className="rounded-2xl border border-[#2A2A2A] bg-[#1A1A1A] p-6">
-      <h3 className="mb-4 text-lg font-semibold text-white">
-        Lichaamssamenstelling
-      </h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Vetvrije massa */}
-        <div>
-          <p className="text-xs text-gray-400 mb-2 uppercase tracking-wider">Spiermassa</p>
-          <ResponsiveContainer width="100%" height={180}>
-            <AreaChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
-              <defs>
-                <linearGradient id="leanGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#4ADE80" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="#4ADE80" stopOpacity={0.05} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#2A2A2A" />
-              <XAxis
-                dataKey="date"
-                tick={{ fill: '#9CA3AF', fontSize: 11 }}
-                axisLine={{ stroke: '#2A2A2A' }}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fill: '#9CA3AF', fontSize: 11 }}
-                axisLine={{ stroke: '#2A2A2A' }}
-                tickLine={false}
-                unit=" kg"
-                domain={['dataMin - 1', 'dataMax + 1']}
-                width={55}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: '#1A1A1A',
-                  border: '1px solid #2A2A2A',
-                  borderRadius: '0.5rem',
-                  color: '#fff',
-                }}
-                formatter={((value: any) => [`${Number(value).toFixed(1)} kg`]) as any}
-              />
-              <Area
-                type="monotone"
-                dataKey="leanMass"
-                stroke="#4ADE80"
-                strokeWidth={2}
-                fill="url(#leanGrad)"
-                dot={{ r: 3, fill: '#4ADE80' }}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Vetmassa */}
-        <div>
-          <p className="text-xs text-gray-400 mb-2 uppercase tracking-wider">Vetmassa</p>
-          <ResponsiveContainer width="100%" height={180}>
-            <AreaChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
-              <defs>
-                <linearGradient id="fatGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#C8A55C" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="#C8A55C" stopOpacity={0.05} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#2A2A2A" />
-              <XAxis
-                dataKey="date"
-                tick={{ fill: '#9CA3AF', fontSize: 11 }}
-                axisLine={{ stroke: '#2A2A2A' }}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fill: '#9CA3AF', fontSize: 11 }}
-                axisLine={{ stroke: '#2A2A2A' }}
-                tickLine={false}
-                unit=" kg"
-                domain={['dataMin - 0.5', 'dataMax + 0.5']}
-                width={55}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: '#1A1A1A',
-                  border: '1px solid #2A2A2A',
-                  borderRadius: '0.5rem',
-                  color: '#fff',
-                }}
-                formatter={((value: any) => [`${Number(value).toFixed(1)} kg`]) as any}
-              />
-              <Area
-                type="monotone"
-                dataKey="fatMass"
-                stroke="#C8A55C"
-                strokeWidth={2}
-                fill="url(#fatGrad)"
-                dot={{ r: 3, fill: '#C8A55C' }}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
+    <div style={chartCardStyle}>
+      <div className="flex items-baseline justify-between mb-4">
+        <h3 style={chartTitleStyle}>Lichaamssamenstelling</h3>
+        <span style={chartMetaStyle}>Spier · Vet</span>
       </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <SubChart
+          title="Spiermassa"
+          data={data}
+          dataKey="leanMass"
+          color={chartColors.accent}
+          gradientId="leanGrad"
+        />
+        <SubChart
+          title="Vetmassa"
+          data={data}
+          dataKey="fatMass"
+          color={chartColors.negative}
+          gradientId="fatGrad"
+        />
+      </div>
+    </div>
+  );
+}
+
+interface SubChartProps {
+  title: string;
+  data: { date: string; leanMass: number; fatMass: number }[];
+  dataKey: 'leanMass' | 'fatMass';
+  color: string;
+  gradientId: string;
+}
+
+function SubChart({ title, data, dataKey, color, gradientId }: SubChartProps) {
+  return (
+    <div>
+      <p style={{ ...chartMetaStyle, marginBottom: 8 }}>{title}</p>
+      <ResponsiveContainer width="100%" height={160}>
+        <AreaChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
+          <defs>
+            <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={color} stopOpacity={0.25} />
+              <stop offset="100%" stopColor={color} stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid stroke={chartColors.grid} vertical={false} />
+          <XAxis dataKey="date" tick={chartTickStyle} axisLine={chartAxisStyle} tickLine={false} />
+          <YAxis
+            tick={chartTickStyle}
+            axisLine={chartAxisStyle}
+            tickLine={false}
+            unit=" kg"
+            domain={['dataMin - 1', 'dataMax + 1']}
+            width={50}
+          />
+          <Tooltip
+            contentStyle={chartTooltipStyle}
+            labelStyle={chartTooltipLabelStyle}
+            formatter={((value: number | string) => [`${Number(value).toFixed(1)} kg`]) as unknown as undefined}
+          />
+          <Area
+            type="monotone"
+            dataKey={dataKey}
+            stroke={color}
+            strokeWidth={1.75}
+            fill={`url(#${gradientId})`}
+            dot={false}
+            activeDot={{ r: 4, fill: color, stroke: chartColors.bgCard, strokeWidth: 2 }}
+          />
+        </AreaChart>
+      </ResponsiveContainer>
     </div>
   );
 }

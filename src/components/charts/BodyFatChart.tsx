@@ -10,6 +10,16 @@ import {
 } from 'recharts';
 import type { Measurement } from '../../types/measurement';
 import { formatShortDate } from '../../lib/utils';
+import {
+  chartColors,
+  chartCardStyle,
+  chartTitleStyle,
+  chartMetaStyle,
+  chartTickStyle,
+  chartAxisStyle,
+  chartTooltipStyle,
+  chartTooltipLabelStyle,
+} from './chartTheme';
 
 interface BodyFatChartProps {
   measurements: Measurement[];
@@ -22,49 +32,49 @@ export default function BodyFatChart({ measurements, goalTarget }: BodyFatChartP
     bodyFatPercentage: m.bodyFatPercentage,
   }));
 
+  const latest = data.length ? data[data.length - 1].bodyFatPercentage : null;
+
   return (
-    <div className="rounded-2xl border border-[#2A2A2A] bg-[#1A1A1A] p-6">
-      <h3 className="mb-4 text-lg font-semibold text-white">Vetpercentage</h3>
-      <ResponsiveContainer width="100%" height={300}>
+    <div style={chartCardStyle}>
+      <div className="flex items-baseline justify-between mb-4">
+        <h3 style={chartTitleStyle}>Vetpercentage</h3>
+        {latest !== null && (
+          <span style={chartMetaStyle}>{latest.toFixed(1)}% nu</span>
+        )}
+      </div>
+      <ResponsiveContainer width="100%" height={240}>
         <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="bodyFatGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#C8A55C" stopOpacity={0.4} />
-              <stop offset="100%" stopColor="#C8A55C" stopOpacity={0} />
+              <stop offset="0%" stopColor="var(--color-aurora-gold)" stopOpacity={0.25} />
+              <stop offset="100%" stopColor="var(--color-aurora-gold)" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#2A2A2A" />
-          <XAxis
-            dataKey="date"
-            tick={{ fill: '#9CA3AF', fontSize: 12 }}
-            axisLine={{ stroke: '#2A2A2A' }}
-            tickLine={false}
-          />
+          <CartesianGrid stroke={chartColors.grid} vertical={false} />
+          <XAxis dataKey="date" tick={chartTickStyle} axisLine={chartAxisStyle} tickLine={false} />
           <YAxis
-            tick={{ fill: '#9CA3AF', fontSize: 12 }}
-            axisLine={{ stroke: '#2A2A2A' }}
+            tick={chartTickStyle}
+            axisLine={chartAxisStyle}
             tickLine={false}
             unit="%"
             domain={['dataMin - 1', 'dataMax + 1']}
+            width={40}
           />
           <Tooltip
-            contentStyle={{
-              backgroundColor: '#1A1A1A',
-              border: '1px solid #2A2A2A',
-              borderRadius: '0.5rem',
-              color: '#fff',
-            }}
-            formatter={((value: any) => [`${Number(value).toFixed(1)}%`, 'Vetpercentage']) as any}
+            contentStyle={chartTooltipStyle}
+            labelStyle={chartTooltipLabelStyle}
+            formatter={((value: number | string) => [`${Number(value).toFixed(1)}%`, 'Vet']) as unknown as undefined}
           />
           {goalTarget !== undefined && (
             <ReferenceLine
               y={goalTarget}
-              stroke="#A07D3A"
-              strokeDasharray="6 4"
+              stroke={chartColors.accentDark}
+              strokeDasharray="4 4"
               label={{
-                value: `Doel: ${goalTarget}%`,
-                fill: '#A07D3A',
-                fontSize: 12,
+                value: `Doel ${goalTarget}%`,
+                fill: 'var(--color-aurora-gold-dark)',
+                fontSize: 10,
+                fontFamily: 'var(--font-mono)',
                 position: 'insideTopRight',
               }}
             />
@@ -72,8 +82,8 @@ export default function BodyFatChart({ measurements, goalTarget }: BodyFatChartP
           <Area
             type="monotone"
             dataKey="bodyFatPercentage"
-            stroke="#C8A55C"
-            strokeWidth={2}
+            stroke={chartColors.accent}
+            strokeWidth={1.75}
             fill="url(#bodyFatGradient)"
           />
         </AreaChart>

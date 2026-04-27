@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Utensils, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import type { Measurement } from '../../types/measurement';
 import { useNutritionSettings } from '../../hooks/useNutritionSettings';
 import { useDailyIntake } from '../../hooks/useDailyIntake';
@@ -20,7 +20,6 @@ function StatBar({
   current: number;
   target: number;
   unit: string;
-  /** Voor kcal: ±% rondom target = groene zone */
   tolerance?: number;
 }) {
   const pct = target > 0 ? Math.min(100, Math.round((current / target) * 100)) : 0;
@@ -39,26 +38,38 @@ function StatBar({
 
   const barColor =
     status === 'green'
-      ? 'bg-[#4ADE80]'
+      ? 'var(--color-positive)'
       : status === 'amber'
-        ? 'bg-aurora-gold'
+        ? 'var(--color-aurora-gold)'
         : status === 'red'
-          ? 'bg-[#F87171]'
-          : 'bg-gray-600';
+          ? 'var(--color-negative)'
+          : 'var(--color-ink-4)';
 
   return (
-    <div className="flex-1 min-w-0">
-      <div className="flex items-baseline justify-between mb-1">
-        <span className="text-xs text-gray-500">{label}</span>
-        <span className="text-xs tabular-nums">
-          <span className="text-white font-medium">{Math.round(current)}</span>
-          <span className="text-gray-600"> / {target} {unit}</span>
+    <div>
+      <div className="flex items-baseline justify-between mb-1.5">
+        <span
+          className="font-mono text-[10px] uppercase tracking-[0.12em]"
+          style={{ color: 'var(--color-ink-3)' }}
+        >
+          {label}
+        </span>
+        <span className="font-mono text-[11px] tabular-nums" style={{ color: 'var(--color-ink-2)' }}>
+          <span style={{ color: 'var(--color-ink)', fontWeight: 500 }}>{Math.round(current)}</span>
+          <span style={{ color: 'var(--color-ink-3)' }}>
+            {' '}
+            / {target}
+            {unit ? ` ${unit}` : ''}
+          </span>
         </span>
       </div>
-      <div className="h-1.5 rounded-full bg-aurora-black overflow-hidden">
+      <div
+        className="h-1 rounded-full overflow-hidden"
+        style={{ background: 'var(--color-bg-sunken)' }}
+      >
         <div
-          className={`h-full ${barColor} transition-all duration-300`}
-          style={{ width: `${pct}%` }}
+          className="h-full transition-[width] duration-300"
+          style={{ width: `${pct}%`, background: barColor }}
         />
       </div>
     </div>
@@ -79,37 +90,51 @@ export default function NutritionTodaySummary({ measurements }: Props) {
   return (
     <Link
       to="/nutrition"
-      className="rounded-2xl border border-aurora-border bg-aurora-surface p-4 flex items-center gap-4 hover:border-aurora-gold/40 transition-colors group"
+      className="rounded-[14px] flex flex-col justify-between transition-colors group"
+      style={{
+        background: 'var(--color-bg-card)',
+        border: '1px solid var(--color-rule)',
+        padding: 'var(--pad-card)',
+      }}
     >
-      <div className="w-10 h-10 rounded-lg bg-aurora-gold/10 border border-aurora-gold/30 flex items-center justify-center shrink-0">
-        <Utensils size={18} className="text-aurora-gold" />
+      <div className="flex items-baseline justify-between mb-6">
+        <h3
+          className="font-display italic text-[22px] m-0"
+          style={{ color: 'var(--color-ink)' }}
+        >
+          Vandaag
+        </h3>
+        <span
+          className="font-mono text-[10.5px] uppercase tracking-[0.12em]"
+          style={{ color: 'var(--color-ink-3)' }}
+        >
+          doel · {proteinTarget} g · {kcalTarget} kcal
+        </span>
       </div>
 
-      <div className="flex-1 min-w-0 flex flex-col gap-2">
-        <div className="flex items-baseline justify-between gap-2">
-          <span className="text-sm font-semibold text-white">Vandaag</span>
-          <span className="text-xs text-gray-500 hidden sm:block">
-            doel: {proteinTarget} g eiwit · {kcalTarget} kcal
-          </span>
-        </div>
-        <div className="flex gap-4">
-          <StatBar
-            label="Eiwit"
-            current={todayIntake.proteinG}
-            target={proteinTarget}
-            unit="g"
-          />
-          <StatBar
-            label="Kcal"
-            current={todayIntake.kcal ?? 0}
-            target={kcalTarget}
-            unit=""
-            tolerance={0.1}
-          />
-        </div>
+      <div className="flex flex-col gap-5">
+        <StatBar
+          label="Eiwit"
+          current={todayIntake.proteinG}
+          target={proteinTarget}
+          unit="g"
+        />
+        <StatBar
+          label="Kcal"
+          current={todayIntake.kcal ?? 0}
+          target={kcalTarget}
+          unit=""
+          tolerance={0.1}
+        />
       </div>
 
-      <ChevronRight size={18} className="text-gray-600 group-hover:text-aurora-gold transition-colors shrink-0" />
+      <div
+        className="flex items-center justify-end gap-1 mt-6 font-mono text-[10px] uppercase tracking-[0.14em]"
+        style={{ color: 'var(--color-ink-3)' }}
+      >
+        Meer loggen
+        <ChevronRight size={12} />
+      </div>
     </Link>
   );
 }

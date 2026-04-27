@@ -11,6 +11,16 @@ import {
 } from 'recharts';
 import type { Measurement } from '../../types/measurement';
 import { formatShortDate, calculateBMI } from '../../lib/utils';
+import {
+  chartColors,
+  chartCardStyle,
+  chartTitleStyle,
+  chartMetaStyle,
+  chartTickStyle,
+  chartAxisStyle,
+  chartTooltipStyle,
+  chartTooltipLabelStyle,
+} from './chartTheme';
 
 interface BMIChartProps {
   measurements: Measurement[];
@@ -23,17 +33,15 @@ export default function BMIChart({ measurements }: BMIChartProps) {
   const heightM = current.height / 100;
   const currentBMI = calculateBMI(current.weight, current.height);
 
-  // Healthy weight range for this height
-  const healthyMin = 18.5 * heightM * heightM; // ~55.4 kg
-  const healthyMax = 24.9 * heightM * heightM; // ~74.5 kg
-  const targetWeight = 25.0 * heightM * heightM; // BMI 25 boundary
+  const healthyMin = 18.5 * heightM * heightM;
+  const healthyMax = 24.9 * heightM * heightM;
+  const targetWeight = 25.0 * heightM * heightM;
 
   const data = measurements.map((m) => ({
     date: formatShortDate(m.date),
     bmi: Math.round(calculateBMI(m.weight, m.height) * 10) / 10,
   }));
 
-  // Y-axis domain: show healthy zone + current value with padding
   const allBMIs = data.map((d) => d.bmi);
   const minBMI = Math.min(...allBMIs, 18.5);
   const maxBMI = Math.max(...allBMIs, 25);
@@ -41,116 +49,134 @@ export default function BMIChart({ measurements }: BMIChartProps) {
   const yMax = Math.ceil(maxBMI + 1);
 
   return (
-    <div className="rounded-2xl border border-[#2A2A2A] bg-[#1A1A1A] p-6">
+    <div style={chartCardStyle}>
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold text-white">BMI Verloop</h3>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <h3 style={chartTitleStyle}>BMI verloop</h3>
+          <p style={{ ...chartMetaStyle, marginTop: 4 }}>
             Lengte {current.height} cm · Leeftijd {current.age} jaar
           </p>
         </div>
         <div className="text-right">
-          <p className="text-2xl font-bold text-white tabular-nums">
+          <p
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '32px',
+              color: 'var(--color-ink)',
+              lineHeight: 1,
+              margin: 0,
+            }}
+            className="tabular-nums"
+          >
             {currentBMI.toFixed(1)}
           </p>
-          <p className="text-xs text-gray-400">huidig</p>
+          <p style={{ ...chartMetaStyle, marginTop: 4 }}>huidig</p>
         </div>
       </div>
 
-      <ResponsiveContainer width="100%" height={280}>
+      <ResponsiveContainer width="100%" height={240}>
         <LineChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#2A2A2A" />
+          <CartesianGrid stroke={chartColors.grid} vertical={false} />
 
-          {/* Healthy BMI zone: 18.5 – 24.9 */}
           <ReferenceArea
             y1={18.5}
             y2={24.9}
-            fill="#4ADE80"
-            fillOpacity={0.08}
+            fill={chartColors.positive}
+            fillOpacity={0.06}
             strokeOpacity={0}
           />
 
-          {/* Reference lines for BMI boundaries */}
           <ReferenceLine
             y={18.5}
-            stroke="#4ADE80"
-            strokeDasharray="4 4"
+            stroke={chartColors.positive}
+            strokeDasharray="3 3"
             strokeOpacity={0.4}
-            label={{ value: '18.5', position: 'left', fill: '#4ADE80', fontSize: 10 }}
+            label={{ value: '18.5', position: 'left', fill: 'var(--color-positive)', fontSize: 9, fontFamily: 'var(--font-mono)' }}
           />
           <ReferenceLine
             y={24.9}
-            stroke="#4ADE80"
-            strokeDasharray="4 4"
+            stroke={chartColors.positive}
+            strokeDasharray="3 3"
             strokeOpacity={0.4}
-            label={{ value: '24.9', position: 'left', fill: '#4ADE80', fontSize: 10 }}
+            label={{ value: '24.9', position: 'left', fill: 'var(--color-positive)', fontSize: 9, fontFamily: 'var(--font-mono)' }}
           />
           <ReferenceLine
             y={30}
-            stroke="#F87171"
-            strokeDasharray="4 4"
+            stroke={chartColors.negative}
+            strokeDasharray="3 3"
             strokeOpacity={0.3}
-            label={{ value: '30 Obesitas', position: 'right', fill: '#F87171', fontSize: 10 }}
+            label={{ value: '30 Obesitas', position: 'right', fill: 'var(--color-negative)', fontSize: 9, fontFamily: 'var(--font-mono)' }}
           />
 
-          <XAxis
-            dataKey="date"
-            tick={{ fill: '#9CA3AF', fontSize: 12 }}
-            axisLine={{ stroke: '#2A2A2A' }}
-            tickLine={false}
-          />
-          <YAxis
-            tick={{ fill: '#9CA3AF', fontSize: 12 }}
-            axisLine={{ stroke: '#2A2A2A' }}
-            tickLine={false}
-            domain={[yMin, yMax]}
-            width={40}
-          />
+          <XAxis dataKey="date" tick={chartTickStyle} axisLine={chartAxisStyle} tickLine={false} />
+          <YAxis tick={chartTickStyle} axisLine={chartAxisStyle} tickLine={false} domain={[yMin, yMax]} width={36} />
           <Tooltip
-            contentStyle={{
-              backgroundColor: '#1A1A1A',
-              border: '1px solid #2A2A2A',
-              borderRadius: '0.5rem',
-              color: '#fff',
-            }}
-            formatter={((value: any) => [`${Number(value).toFixed(1)}`]) as any}
+            contentStyle={chartTooltipStyle}
+            labelStyle={chartTooltipLabelStyle}
+            formatter={((value: number | string) => [`${Number(value).toFixed(1)}`]) as unknown as undefined}
             labelFormatter={(label) => String(label ?? '')}
           />
           <Line
             type="monotone"
             dataKey="bmi"
-            stroke="#C8A55C"
-            strokeWidth={3}
-            dot={{ r: 4, fill: '#C8A55C', strokeWidth: 0 }}
-            activeDot={{ r: 6, fill: '#C8A55C', strokeWidth: 2, stroke: '#1A1A1A' }}
+            stroke={chartColors.ink}
+            strokeWidth={1.75}
+            dot={false}
+            activeDot={{ r: 4, fill: chartColors.ink, stroke: chartColors.bgCard, strokeWidth: 2 }}
             name="BMI"
           />
         </LineChart>
       </ResponsiveContainer>
 
-      {/* Target info below chart */}
-      <div className="mt-4 grid grid-cols-3 gap-3 text-center">
-        <div className="rounded-xl bg-[#111] p-3">
-          <p className="text-xs text-gray-500 mb-1">Gezond gewicht</p>
-          <p className="text-sm font-semibold text-[#4ADE80] tabular-nums">
-            {healthyMin.toFixed(0)} – {healthyMax.toFixed(0)} kg
-          </p>
-        </div>
-        <div className="rounded-xl bg-[#111] p-3">
-          <p className="text-xs text-gray-500 mb-1">Streefgewicht</p>
-          <p className="text-sm font-semibold text-aurora-gold tabular-nums">
-            ≤ {targetWeight.toFixed(1)} kg
-          </p>
-        </div>
-        <div className="rounded-xl bg-[#111] p-3">
-          <p className="text-xs text-gray-500 mb-1">Nog af te vallen</p>
-          <p className={`text-sm font-semibold tabular-nums ${current.weight > targetWeight ? 'text-[#F87171]' : 'text-[#4ADE80]'}`}>
-            {current.weight > targetWeight
+      <div className="mt-4 grid grid-cols-3 gap-2">
+        <InfoTile label="Gezond gewicht" value={`${healthyMin.toFixed(0)} – ${healthyMax.toFixed(0)} kg`} variant="positive" />
+        <InfoTile label="Streefgewicht" value={`≤ ${targetWeight.toFixed(1)} kg`} variant="accent" />
+        <InfoTile
+          label={current.weight > targetWeight ? 'Nog af te vallen' : 'Status'}
+          value={
+            current.weight > targetWeight
               ? `−${(current.weight - targetWeight).toFixed(1)} kg`
-              : '✓ Op streef!'}
-          </p>
-        </div>
+              : '✓ Op streef'
+          }
+          variant={current.weight > targetWeight ? 'negative' : 'positive'}
+        />
       </div>
+    </div>
+  );
+}
+
+function InfoTile({
+  label,
+  value,
+  variant,
+}: {
+  label: string;
+  value: string;
+  variant: 'positive' | 'negative' | 'accent';
+}) {
+  const color =
+    variant === 'positive'
+      ? 'var(--color-positive)'
+      : variant === 'negative'
+        ? 'var(--color-negative)'
+        : 'var(--color-aurora-gold)';
+  return (
+    <div
+      className="rounded-[10px] p-3 text-center"
+      style={{ background: 'var(--color-bg-sunken)' }}
+    >
+      <p style={{ ...chartMetaStyle, fontSize: 9, marginBottom: 4 }}>{label}</p>
+      <p
+        className="tabular-nums"
+        style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '16px',
+          color,
+          margin: 0,
+        }}
+      >
+        {value}
+      </p>
     </div>
   );
 }

@@ -9,6 +9,16 @@ import {
 } from 'recharts';
 import type { Measurement } from '../../types/measurement';
 import { formatShortDate } from '../../lib/utils';
+import {
+  chartColors,
+  chartCardStyle,
+  chartTitleStyle,
+  chartMetaStyle,
+  chartTickStyle,
+  chartAxisStyle,
+  chartTooltipStyle,
+  chartTooltipLabelStyle,
+} from './chartTheme';
 
 interface WeightChartProps {
   measurements: Measurement[];
@@ -23,65 +33,62 @@ export default function WeightChart({ measurements }: WeightChartProps) {
   }));
 
   return (
-    <div className="rounded-2xl border border-[#2A2A2A] bg-[#1A1A1A] p-5">
-      <h3 className="text-base font-semibold text-white mb-4">Lichaamscompositie</h3>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#2A2A2A" />
+    <div style={chartCardStyle}>
+      <div className="flex items-baseline justify-between mb-4">
+        <h3 style={chartTitleStyle}>Lichaamscompositie</h3>
+        <span style={chartMetaStyle}>Gewicht · Spier · Vet</span>
+      </div>
+      <ResponsiveContainer width="100%" height={260}>
+        <LineChart data={data} margin={{ top: 8, right: 16, bottom: 8, left: 0 }}>
+          <CartesianGrid stroke={chartColors.grid} vertical={false} />
           <XAxis
             dataKey="date"
-            stroke="#6B7280"
-            tick={{ fill: '#9CA3AF', fontSize: 12 }}
+            stroke={chartAxisStyle.stroke}
+            tick={chartTickStyle}
             tickLine={false}
-            axisLine={{ stroke: '#2A2A2A' }}
+            axisLine={chartAxisStyle}
           />
           <YAxis
-            stroke="#6B7280"
-            tick={{ fill: '#9CA3AF', fontSize: 12 }}
+            stroke={chartAxisStyle.stroke}
+            tick={chartTickStyle}
             tickLine={false}
-            axisLine={{ stroke: '#2A2A2A' }}
+            axisLine={chartAxisStyle}
             unit=" kg"
             width={60}
             domain={['dataMin - 3', 'dataMax + 3']}
           />
           <Tooltip
-            contentStyle={{
-              backgroundColor: '#1A1A1A',
-              border: '1px solid #2A2A2A',
-              borderRadius: '0.75rem',
-              color: '#FFFFFF',
-              fontSize: 13,
-            }}
-            labelStyle={{ color: '#9CA3AF', marginBottom: 4 }}
-            formatter={((value: any) => [`${Number(value).toFixed(1)} kg`]) as any}
+            contentStyle={chartTooltipStyle}
+            labelStyle={chartTooltipLabelStyle}
+            formatter={((value: number | string) => [`${Number(value).toFixed(1)} kg`]) as unknown as undefined}
           />
           <Line
             type="monotone"
             dataKey="weight"
-            stroke="#C8A55C"
-            strokeWidth={3}
-            dot={{ r: 4, fill: '#C8A55C', strokeWidth: 0 }}
-            activeDot={{ r: 6, fill: '#C8A55C', strokeWidth: 2, stroke: '#1A1A1A' }}
-            name="weight"
+            stroke={chartColors.ink}
+            strokeWidth={1.75}
+            dot={false}
+            activeDot={{ r: 4, fill: chartColors.ink, stroke: chartColors.bgCard, strokeWidth: 2 }}
+            name="Gewicht"
           />
           <Line
             type="monotone"
             dataKey="leanMass"
-            stroke="#4ADE80"
-            strokeWidth={2}
-            dot={{ r: 3, fill: '#4ADE80', strokeWidth: 0 }}
-            activeDot={{ r: 5, fill: '#4ADE80', strokeWidth: 2, stroke: '#1A1A1A' }}
-            name="leanMass"
+            stroke={chartColors.accent}
+            strokeWidth={1.5}
+            dot={false}
+            activeDot={{ r: 4, fill: chartColors.accent, stroke: chartColors.bgCard, strokeWidth: 2 }}
+            name="Spier"
           />
           <Line
             type="monotone"
             dataKey="fatMass"
-            stroke="#F87171"
-            strokeWidth={2}
-            strokeDasharray="6 3"
-            dot={{ r: 3, fill: '#F87171', strokeWidth: 0 }}
-            activeDot={{ r: 5, fill: '#F87171', strokeWidth: 2, stroke: '#1A1A1A' }}
-            name="fatMass"
+            stroke={chartColors.negative}
+            strokeWidth={1.5}
+            strokeDasharray="4 3"
+            dot={false}
+            activeDot={{ r: 4, fill: chartColors.negative, stroke: chartColors.bgCard, strokeWidth: 2 }}
+            name="Vet"
           />
         </LineChart>
       </ResponsiveContainer>

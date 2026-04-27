@@ -8,6 +8,12 @@ import {
   Legend,
 } from 'recharts';
 import type { Measurement } from '../../types/measurement';
+import {
+  chartColors,
+  chartCardStyle,
+  chartTitleStyle,
+  chartMetaStyle,
+} from './chartTheme';
 
 interface SkinfoldChartProps {
   measurements: Measurement[];
@@ -36,39 +42,53 @@ export default function SkinfoldChart({ measurements }: SkinfoldChartProps) {
   }));
 
   return (
-    <div className="rounded-2xl border border-[#2A2A2A] bg-[#1A1A1A] p-6">
-      <h3 className="mb-4 text-lg font-semibold text-white">Huidplooien</h3>
-      <ResponsiveContainer width="100%" height={350}>
+    <div style={chartCardStyle}>
+      <div className="flex items-baseline justify-between mb-4">
+        <h3 style={chartTitleStyle}>Huidplooien</h3>
+        <span style={chartMetaStyle}>Eerste vs laatste</span>
+      </div>
+      <ResponsiveContainer width="100%" height={300}>
         <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data}>
-          <PolarGrid stroke="#2A2A2A" />
+          <PolarGrid stroke={chartColors.grid} />
           <PolarAngleAxis
             dataKey="subject"
-            tick={{ fill: '#9CA3AF', fontSize: 12 }}
+            tick={{
+              fill: 'var(--color-ink-3)',
+              fontSize: 10,
+              fontFamily: 'var(--font-mono)',
+            }}
           />
           <PolarRadiusAxis
             angle={90}
-            tick={{ fill: '#6B7280', fontSize: 10 }}
+            tick={{ fill: 'var(--color-ink-4)', fontSize: 9, fontFamily: 'var(--font-mono)' }}
             axisLine={false}
           />
           <Radar
             name="Eerste meting"
             dataKey="first"
-            stroke="#6B7280"
-            fill="#6B7280"
-            fillOpacity={0.1}
-            strokeWidth={1.5}
+            stroke={chartColors.ink3}
+            fill={chartColors.ink3}
+            fillOpacity={0.08}
+            strokeWidth={1.25}
           />
           <Radar
             name="Laatste meting"
             dataKey="latest"
-            stroke="#C8A55C"
-            fill="#C8A55C"
-            fillOpacity={0.3}
-            strokeWidth={2}
+            stroke={chartColors.accent}
+            fill={chartColors.accent}
+            fillOpacity={0.2}
+            strokeWidth={1.5}
           />
           <Legend
+            iconType="line"
+            wrapperStyle={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: 10,
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+            }}
             formatter={(value: string) => (
-              <span style={{ color: '#E5E7EB', fontSize: 13 }}>{value}</span>
+              <span style={{ color: 'var(--color-ink-2)' }}>{value}</span>
             )}
           />
         </RadarChart>
