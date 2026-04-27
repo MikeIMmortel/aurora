@@ -4,11 +4,14 @@ import { Sidebar } from './Sidebar';
 
 export function AppShell({ children }: { children: ReactNode }) {
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
+    <div
+      className="min-h-screen flex flex-col"
+      style={{ background: 'var(--color-bg)', color: 'var(--color-ink)' }}
+    >
       <Header />
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6">
+        <main className="flex-1 overflow-y-auto pb-20 md:pb-12">
           {children}
         </main>
       </div>
