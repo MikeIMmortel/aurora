@@ -138,8 +138,8 @@ export default function WeeklyReview({ intakes, proteinTarget, kcalTarget }: Pro
   return (
     <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 flex flex-col gap-4">
       <div>
-        <h3 className="text-lg font-semibold text-ink">Weekoverzicht</h3>
-        <p className="text-xs text-ink-3 mt-0.5">
+        <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22, color: 'var(--color-ink)', margin: 0, lineHeight: 1 }}>Week<span style={{ color: 'var(--color-aurora-gold)' }}>overzicht</span></h3>
+        <p className="font-mono uppercase tracking-[0.12em] mt-2" style={{ fontSize: 10.5, color: 'var(--color-ink-3)' }}>
           Laatste 7 dagen vs. week daarvoor
         </p>
       </div>

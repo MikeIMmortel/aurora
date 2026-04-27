@@ -97,10 +97,10 @@ export default function NutritionHistoryChart({
     <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 flex flex-col gap-4">
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <h3 className="text-lg font-semibold text-ink">Laatste {days} dagen</h3>
-          <p className="text-xs text-ink-3 mt-0.5">
-            Target: {target} {unit} per dag
-            {metric === 'kcal' && ' (trainingsdag · ±10% is goed)'}
+          <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22, color: 'var(--color-ink)', margin: 0, lineHeight: 1 }}>Laatste {days} dagen</h3>
+          <p className="font-mono uppercase tracking-[0.12em] mt-2" style={{ fontSize: 10.5, color: 'var(--color-ink-3)' }}>
+            Target {target} {unit}/dag
+            {metric === 'kcal' && ' · ±10% goed'}
           </p>
         </div>
 

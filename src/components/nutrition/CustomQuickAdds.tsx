@@ -37,9 +37,9 @@ export default function CustomQuickAdds({ items, onAdd, onDelete }: Props) {
   return (
     <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 flex flex-col gap-4">
       <div>
-        <h3 className="text-lg font-semibold text-ink">Mijn snel-knoppen</h3>
-        <p className="text-xs text-ink-3 mt-0.5">
-          Voeg je eigen gerechten toe zodat je ze met 1 tap kunt loggen
+        <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22, color: 'var(--color-ink)', margin: 0, lineHeight: 1 }}>Mijn snel-knoppen</h3>
+        <p className="font-mono uppercase tracking-[0.12em] mt-2" style={{ fontSize: 10.5, color: 'var(--color-ink-3)' }}>
+          Eigen gerechten met 1 tap loggen
         </p>
       </div>
 

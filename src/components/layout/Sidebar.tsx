@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Upload, GitCompareArrows, Target, PersonStanding, Utensils, Trophy } from 'lucide-react';
+import { LayoutDashboard, Upload, GitCompareArrows, Target, Utensils, Trophy } from 'lucide-react';
 
 const NAV_ITEMS = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -8,7 +8,6 @@ const NAV_ITEMS = [
   { to: '/benchmark', icon: Trophy, label: 'Benchmark' },
   { to: '/goals', icon: Target, label: 'Doelen' },
   { to: '/nutrition', icon: Utensils, label: 'Voeding' },
-  { to: '/body', icon: PersonStanding, label: 'Lichaam' },
 ] as const;
 
 export function Sidebar() {

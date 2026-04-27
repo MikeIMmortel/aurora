@@ -57,9 +57,9 @@ export default function ProteinSources() {
   return (
     <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 flex flex-col gap-5">
       <div>
-        <h3 className="text-lg font-semibold text-ink">Eiwitbronnen — kant-en-klaar</h3>
-        <p className="text-xs text-ink-3 mt-0.5">
-          Snel te combineren tot je dag-target. Kies 3–4 per dag.
+        <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22, color: 'var(--color-ink)', margin: 0, lineHeight: 1 }}>Eiwit<span style={{ color: 'var(--color-aurora-gold)' }}>bronnen</span></h3>
+        <p className="font-mono uppercase tracking-[0.12em] mt-2" style={{ fontSize: 10.5, color: 'var(--color-ink-3)' }}>
+          Kant-en-klaar · 3–4 per dag
         </p>
       </div>
 

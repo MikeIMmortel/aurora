@@ -44,7 +44,18 @@ const IDEAL_VALUE_STYLE: React.CSSProperties = {
   lineHeight: 1,
 };
 
-/** Visuele spectrum-balk met categorieën als segmenten */
+/**
+ * Visuele spectrum-balk met categorieën als segmenten.
+ * Vertical layout (top → bottom):
+ *   1. Threshold labels rij (klein, mono uppercase)
+ *   2. Spacing
+ *   3. Bar (4px) met ideaal-vlag boven en jij-pin onder als ankers
+ *   4. Spacing
+ *   5. Jij-waarde caption
+ *
+ * De ideaal-vlag wordt boven de bar gepositioneerd; threshold labels
+ * staan veilig erboven zodat ze niet overlappen met de markers.
+ */
 function CategorySpectrum({ benchmark }: { benchmark: Benchmark }) {
   const { axisMin, axisMax, thresholds, value, ideal } = benchmark;
   const range = axisMax - axisMin;
@@ -66,84 +77,111 @@ function CategorySpectrum({ benchmark }: { benchmark: Benchmark }) {
   const idealPct = Math.max(0, Math.min(100, ((ideal - axisMin) / range) * 100));
 
   return (
-    <div className="relative pt-6">
-      {/* Ideaal-marker BOVEN de balk (gouden vlag, naar beneden wijzend) */}
-      <div
-        className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
-        style={{ left: `${idealPct}%` }}
-      >
-        <span
-          className="font-mono uppercase tracking-[0.14em]"
-          style={{ fontSize: 8.5, color: 'var(--color-aurora-gold)', fontWeight: 500 }}
-        >
-          Ideaal
-        </span>
-        <div
-          className="mt-0.5"
-          style={{
-            width: 0,
-            height: 0,
-            borderLeft: '4px solid transparent',
-            borderRight: '4px solid transparent',
-            borderTop: '5px solid var(--color-aurora-gold)',
-          }}
-        />
-      </div>
-
-      {/* Spectrum balk */}
-      <div
-        className="h-1.5 rounded-full overflow-hidden flex"
-        style={{ background: 'var(--color-bg-sunken)' }}
-      >
-        {segments.map((seg, i) => (
-          <div
-            key={i}
-            style={{
-              width: `${seg.widthPct}%`,
-              backgroundColor: seg.color,
-              opacity: 0.7,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Jouw waarde ONDER de balk als ink-pin (naar boven wijzend) */}
-      <div
-        className="absolute -translate-x-1/2 flex flex-col items-center"
-        style={{ left: `${valuePct}%`, top: '24px' }}
-      >
-        <div
-          style={{
-            width: 0,
-            height: 0,
-            borderLeft: '4px solid transparent',
-            borderRight: '4px solid transparent',
-            borderBottom: '5px solid var(--color-ink)',
-          }}
-        />
-        <span
-          className="font-mono uppercase tracking-[0.14em] mt-0.5"
-          style={{ fontSize: 8.5, color: 'var(--color-ink)', fontWeight: 500 }}
-        >
-          Jij
-        </span>
-      </div>
-
-      {/* Threshold labels onder de balk */}
-      <div className="relative h-3.5 mt-7" style={{ ...META_STYLE, fontSize: 9 }}>
+    <div className="flex flex-col gap-2">
+      {/* Threshold labels — bovenaan, ver weg van markers */}
+      <div className="relative h-3.5">
         {segments.map((seg, i) => {
           if (!seg.label) return null;
           const center = seg.startPct + seg.widthPct / 2;
           return (
             <span
               key={i}
-              className="absolute -translate-x-1/2 whitespace-nowrap"
-              style={{ left: `${center}%` }}
+              className="absolute -translate-x-1/2 whitespace-nowrap font-mono uppercase tracking-[0.1em]"
+              style={{
+                left: `${center}%`,
+                fontSize: 8.5,
+                color: 'var(--color-ink-3)',
+              }}
             >
               {seg.label}
             </span>
           );
         })}
+      </div>
+
+      {/* Bar met ideaal-vlag boven en jij-marker onder */}
+      <div className="relative" style={{ paddingTop: 12, paddingBottom: 18 }}>
+        {/* Ideaal-vlag (gouden driehoek wijst naar bar) */}
+        <div
+          className="absolute -translate-x-1/2"
+          style={{ top: 0, left: `${idealPct}%` }}
+        >
+          <div
+            style={{
+              width: 0,
+              height: 0,
+              borderLeft: '5px solid transparent',
+              borderRight: '5px solid transparent',
+              borderTop: '6px solid var(--color-aurora-gold)',
+              transform: 'translateX(-5px)',
+            }}
+          />
+        </div>
+
+        {/* De bar zelf */}
+        <div
+          className="h-1.5 rounded-full overflow-hidden flex"
+          style={{ background: 'var(--color-bg-sunken)' }}
+        >
+          {segments.map((seg, i) => (
+            <div
+              key={i}
+              style={{
+                width: `${seg.widthPct}%`,
+                backgroundColor: seg.color,
+                opacity: 0.75,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Jij-pin (ink driehoek wijst naar bar) */}
+        <div
+          className="absolute -translate-x-1/2"
+          style={{ bottom: 6, left: `${valuePct}%` }}
+        >
+          <div
+            style={{
+              width: 0,
+              height: 0,
+              borderLeft: '5px solid transparent',
+              borderRight: '5px solid transparent',
+              borderBottom: '6px solid var(--color-ink)',
+              transform: 'translateX(-5px)',
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Legenda onder de bar — tweekoloms */}
+      <div
+        className="flex items-center justify-between font-mono uppercase tracking-[0.1em]"
+        style={{ fontSize: 9, color: 'var(--color-ink-3)' }}
+      >
+        <span className="flex items-center gap-1.5">
+          <span
+            style={{
+              width: 0,
+              height: 0,
+              borderLeft: '3px solid transparent',
+              borderRight: '3px solid transparent',
+              borderBottom: '4px solid var(--color-ink)',
+            }}
+          />
+          Jij
+        </span>
+        <span className="flex items-center gap-1.5">
+          Ideaal
+          <span
+            style={{
+              width: 0,
+              height: 0,
+              borderLeft: '3px solid transparent',
+              borderRight: '3px solid transparent',
+              borderTop: '4px solid var(--color-aurora-gold)',
+            }}
+          />
+        </span>
       </div>
     </div>
   );

@@ -13,8 +13,8 @@ export default function MacroCard({ title, subtitle, macros, accent = false }: P
   return (
     <div className={`rounded-2xl border ${border} bg-aurora-surface p-5 flex flex-col gap-4`}>
       <div>
-        <h3 className="text-lg font-semibold text-ink">{title}</h3>
-        <p className="text-xs text-ink-3 mt-0.5">{subtitle}</p>
+        <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22, color: 'var(--color-ink)', margin: 0, lineHeight: 1 }}>{title}</h3>
+        <p className="font-mono uppercase tracking-[0.12em] mt-2" style={{ fontSize: 10.5, color: 'var(--color-ink-3)' }}>{subtitle}</p>
       </div>
 
       <div className="flex items-baseline gap-2">

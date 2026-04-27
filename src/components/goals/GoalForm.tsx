@@ -9,8 +9,13 @@ interface Props {
 }
 
 const ALL_FIELDS: GoalField[] = [
-  'weight', 'bodyFatPercentage', 'fatMass', 'leanMass',
-  'circumferences.belly', 'circumferences.arm', 'circumferences.upperLeg',
+  'weight',
+  'bodyFatPercentage',
+  'fatMass',
+  'leanMass',
+  'circumferences.belly',
+  'circumferences.arm',
+  'circumferences.upperLeg',
 ];
 
 export function GoalForm({ onAdd, existingFields }: Props) {
@@ -41,48 +46,100 @@ export function GoalForm({ onAdd, existingFields }: Props) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 px-4 py-2 border border-dashed border-aurora-border rounded-lg text-ink-3 hover:text-aurora-gold hover:border-aurora-gold/50 transition-colors"
+        className="flex items-center justify-center gap-2 w-full py-4 rounded-[14px] transition-colors font-mono uppercase tracking-[0.12em]"
+        style={{
+          border: '1px dashed var(--color-rule-2)',
+          color: 'var(--color-ink-3)',
+          background: 'transparent',
+          fontSize: 11,
+        }}
       >
-        <Plus size={16} />
+        <Plus size={14} />
         Doel toevoegen
       </button>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-aurora-surface border border-aurora-border rounded-xl p-4 flex flex-col sm:flex-row gap-3">
-      <select
-        value={field}
-        onChange={(e) => setField(e.target.value as GoalField)}
-        className="bg-aurora-black border border-aurora-border rounded-lg px-3 py-2 text-sm focus:border-aurora-gold focus:outline-none"
-      >
-        {availableFields.map((f) => (
-          <option key={f} value={f}>{GOAL_FIELD_LABELS[f]}</option>
-        ))}
-      </select>
-      <div className="flex items-center gap-2">
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-[14px] flex flex-col sm:flex-row gap-3 items-stretch sm:items-end"
+      style={{
+        background: 'var(--color-bg-card)',
+        border: '1px solid var(--color-rule)',
+        padding: 'var(--pad-card)',
+      }}
+    >
+      <div className="flex-1 flex flex-col gap-1.5">
+        <label
+          className="font-mono uppercase tracking-[0.12em]"
+          style={{ fontSize: 9, color: 'var(--color-ink-3)' }}
+        >
+          Wat
+        </label>
+        <select
+          value={field}
+          onChange={(e) => setField(e.target.value as GoalField)}
+          className="rounded-[7px] px-3 py-2 text-sm focus:outline-none"
+          style={{
+            background: 'var(--color-bg-sunken)',
+            border: '1px solid var(--color-rule-2)',
+            color: 'var(--color-ink)',
+          }}
+        >
+          {availableFields.map((f) => (
+            <option key={f} value={f}>
+              {GOAL_FIELD_LABELS[f]}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <label
+          className="font-mono uppercase tracking-[0.12em]"
+          style={{ fontSize: 9, color: 'var(--color-ink-3)' }}
+        >
+          Doel ({GOAL_FIELD_UNITS[field]})
+        </label>
         <input
           type="number"
           step="0.1"
           value={targetValue}
           onChange={(e) => setTargetValue(e.target.value)}
-          placeholder={`Doel (${GOAL_FIELD_UNITS[field]})`}
-          className="w-32 bg-aurora-black border border-aurora-border rounded-lg px-3 py-2 text-sm focus:border-aurora-gold focus:outline-none"
+          placeholder="0.0"
+          className="w-32 rounded-[7px] px-3 py-2 text-sm focus:outline-none tabular-nums"
+          style={{
+            background: 'var(--color-bg-sunken)',
+            border: '1px solid var(--color-rule-2)',
+            color: 'var(--color-ink)',
+          }}
           required
         />
-        <span className="text-ink-3 text-sm">{GOAL_FIELD_UNITS[field]}</span>
       </div>
+
       <div className="flex gap-2">
         <button
           type="submit"
-          className="px-4 py-2 bg-aurora-gold text-aurora-black rounded-lg font-medium text-sm hover:bg-aurora-gold-light transition-colors"
+          className="px-4 py-2 rounded-[7px] font-mono uppercase tracking-[0.08em] transition-colors"
+          style={{
+            background: 'var(--color-ink)',
+            color: 'var(--color-bg)',
+            fontSize: 11,
+          }}
         >
           Toevoegen
         </button>
         <button
           type="button"
           onClick={() => setIsOpen(false)}
-          className="px-4 py-2 border border-aurora-border rounded-lg text-ink-3 text-sm hover:text-ink transition-colors"
+          className="px-4 py-2 rounded-[7px] font-mono uppercase tracking-[0.08em] transition-colors"
+          style={{
+            border: '1px solid var(--color-rule-2)',
+            color: 'var(--color-ink-3)',
+            fontSize: 11,
+            background: 'transparent',
+          }}
         >
           Annuleren
         </button>

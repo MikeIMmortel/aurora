@@ -13,9 +13,18 @@ export function ImportHistory({ measurements, onDelete }: Props) {
   );
 
   return (
-    <div className="bg-aurora-surface border border-aurora-border rounded-xl overflow-hidden">
-      <div className="px-6 py-4 border-b border-aurora-border">
-        <h3 className="font-semibold">Alle metingen ({measurements.length})</h3>
+    <div
+      className="rounded-[14px] overflow-hidden"
+      style={{
+        background: 'var(--color-bg-card)',
+        border: '1px solid var(--color-rule)',
+      }}
+    >
+      <div className="flex items-baseline justify-between" style={{ padding: 'var(--pad-card)', borderBottom: '1px solid var(--color-rule)' }}>
+        <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22, color: 'var(--color-ink)', margin: 0, lineHeight: 1 }}>Archief</h3>
+        <span className="font-mono uppercase tracking-[0.12em]" style={{ fontSize: 10.5, color: 'var(--color-ink-3)' }}>
+          {measurements.length} {measurements.length === 1 ? 'meting' : 'metingen'}
+        </span>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">

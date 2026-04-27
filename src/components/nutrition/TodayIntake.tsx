@@ -88,9 +88,9 @@ export default function TodayIntake({
     <div className="rounded-2xl border border-aurora-gold/60 bg-aurora-surface p-5 flex flex-col gap-5">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-lg font-semibold text-ink">Vandaag</h3>
-          <p className="text-xs text-ink-3 mt-0.5">
-            Tap een snel-knop na elke maaltijd — eiwit en kcal worden samen gelogd
+          <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22, color: 'var(--color-ink)', margin: 0, lineHeight: 1 }}>Vandaag</h3>
+          <p className="font-mono uppercase tracking-[0.12em] mt-2" style={{ fontSize: 10.5, color: 'var(--color-ink-3)' }}>
+            Tap een snel-knop na elke maaltijd
           </p>
         </div>
         <button

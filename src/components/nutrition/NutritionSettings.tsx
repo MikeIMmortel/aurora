@@ -26,7 +26,7 @@ const ACTIVITIES: ActivityLevel[] = [
 export default function NutritionSettings({ settings, onChange }: Props) {
   return (
     <div className="rounded-2xl border border-aurora-border bg-aurora-surface p-5 flex flex-col gap-5">
-      <h3 className="text-lg font-semibold text-ink">Instellingen</h3>
+      <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22, color: 'var(--color-ink)', margin: 0, lineHeight: 1 }}>Instellingen</h3>
 
       <Field label="Doel">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">

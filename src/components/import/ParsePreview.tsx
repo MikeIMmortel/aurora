@@ -13,9 +13,17 @@ export function ParsePreview({ parsed, duplicates, onConfirm, onCancel }: Props)
   const newMeasurements = parsed.filter((m) => !duplicates.includes(m.date));
 
   return (
-    <div className="bg-aurora-surface border border-aurora-border rounded-xl p-6 space-y-4">
-      <h3 className="text-lg font-semibold">
-        {parsed.length} meting{parsed.length !== 1 ? 'en' : ''} gevonden
+    <div
+      className="rounded-[14px] flex flex-col"
+      style={{
+        background: 'var(--color-bg-card)',
+        border: '1px solid var(--color-rule)',
+        padding: 'var(--pad-card)',
+        gap: 16,
+      }}
+    >
+      <h3 style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: 22, color: 'var(--color-ink)', margin: 0, lineHeight: 1 }}>
+        {parsed.length} meting{parsed.length !== 1 ? 'en' : ''} <span style={{ color: 'var(--color-aurora-gold)' }}>gevonden</span>
       </h3>
 
       <div className="space-y-2">
